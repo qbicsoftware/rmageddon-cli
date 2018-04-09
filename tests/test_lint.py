@@ -14,7 +14,7 @@ Provide example project contents like:
 import os
 import unittest
 
-import r_lint.lint
+import r_lint.lint as lint
 
 def listfiles(path):
     files_found = []
@@ -26,7 +26,15 @@ def pf(wd, path):
     return os.path.join(wd, path)
 
 WD = os.path.dirname(__file__)
+PATH_MINIMAL_WORKING_EXAMPLE = pf(WD, "lint_examples/minimal_working_example")
 
 class TestLint(unittest.TestCase):
     """ Class for lint tests """
-    pass
+    
+    def test_read_dir_content_and_pass(self):
+        """ Check if the dir contains several files/dirs.
+            
+            Fails if not present: Dockerfile, rpackages.txt
+            Warns if not present: scripts, data
+        """
+        lint_obj = lint.RContainerLint(PATH_MINIMAL_WORKING_EXAMPLE)
