@@ -14,15 +14,14 @@ import r_lint.lint
 @click.option(
     '-v', '--verbose',
     is_flag = True,
+    default = False,
     help = "Verbose output (print debug statements)"
 )
-
 def r_lint_cli(verbose):
     if verbose:
         logging.basicConfig(level=logging.DEBUG, format="\n%(levelname)s: %(message)s")
     else:
         logging.basicConfig(level=logging.INFO, format="\n%(levelname)s: %(message)s")
-
 
 @r_lint_cli.command()
 @click.argument(
@@ -31,7 +30,6 @@ def r_lint_cli(verbose):
     required = True,
     metavar = "<R project directory>"
 )
-
 def lint(pipeline_dir):
     """ Check R project against linting guidelines """
 
@@ -39,5 +37,5 @@ def lint(pipeline_dir):
 
 
 if __name__ == '__main__':
-    r_lint_cli(False)
+    r_lint_cli()
 

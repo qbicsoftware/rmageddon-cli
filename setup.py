@@ -15,7 +15,7 @@ with open('requirements.txt') as f:
 
 setup(
     name = 'r-lint',
-    version = 'version',
+    version = version,
     description = 'Small linting tool for R containers at QBiC',
     long_description = readme,
     keywords = ['R', 'linting', 'lint', 'Docker', 'container'],
