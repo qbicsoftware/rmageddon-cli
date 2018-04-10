@@ -67,3 +67,8 @@ class TestLint(unittest.TestCase):
         expectations = {"failed": 0, "warned": 0, "passed": MAX_PASS_CHECKS}
         self.assess_lint_status(lint_obj, **expectations)
     
+    def test_dockerfile_without_base_image(self):
+        """ Check if a Dockerfile has the correct base image
+        included from r-base 
+        """
+        pass

@@ -81,6 +81,49 @@ class RContainerLint(object):
         
     
     def check_dockerfile(self):
+        """ Check the Dockerfile not to be empty and fulfill
+        some basic checks:
+            - Building from r-base
+            - Import of the rpackages.txt
+            - Some labels present
+        """
+        with open(self.path, 'Dockerfile') as d_file: content = d_file.readlines()
+        
+        if not content:
+            self.failed.append((2, 'Dockerfile seems to be empty.'))
+            return
+
+        labels = {}
+        base_img = []
+        rpackage_def = []
+
+        for line in content:
+            if 'LABEL' in line:
+                line = line.strip()
+                labels[line.split('=')[0].strip()] = line.split('=')[1].strip()
+            if 'FROM' in line:
+                line = line.strip()
+                base_img.append(line)
+            if 'rpackage.txt' in line:
+                line = line.strip()
+                rpackage_def = []
+        
+        # 1. Evaluate the base image beeing from r-base
+        if not base_img:
+            self.failed.append((2, 'No base image was defined in the Dockerfile.'))
+            return
+        if any('r-base' in base for base in base_img):
+            self.passed.append((2, 'Base image \'r-base\' was found in the Dockerfile.'))
+        else:
+            self.failed.append((2, 'Container is not build from \'r-base\' image'))
+        
+
+
+            
+
+
+
+
         pass
 
     def check_rpackages(self):
