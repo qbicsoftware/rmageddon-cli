@@ -28,9 +28,9 @@ def pf(wd, path):
 
 WD = os.path.dirname(__file__)
 PATH_MINIMAL_WORKING_EXAMPLE = pf(WD, "lint_examples/minimal_working_example")
-
+PATH_OPTIMAL_WORKING_EXAMPLE = pf(WD, "lint_examples/awesome_working_example")
 # The maximum number of checks that can be passed
-MAX_PASS_CHECKS = 2
+MAX_PASS_CHECKS = 4
 
 class TestLint(unittest.TestCase):
     """ Class for lint tests """
@@ -45,11 +45,25 @@ class TestLint(unittest.TestCase):
     
     def test_read_dir_content_and_pass(self):
         """ Check if the dir contains several files/dirs.
-            
+            Minimal example for passing.
+
             Fails if not present: Dockerfile, rpackages.txt
             Warns if not present: scripts, data
         """
         lint_obj = lint.RContainerLint(PATH_MINIMAL_WORKING_EXAMPLE)
         lint_obj.lint_rproject()
+        expectations = {"failed": 0, "warned": 2, "passed": MAX_PASS_CHECKS - 2}
+        self.assess_lint_status(lint_obj, **expectations)
+    
+    def test_read_dir_ultimate_content_and_pass(self):
+        """ Check if the dir contains several files/dirs.
+            Optimal example for passing.
+
+            Fails if not present: Dockerfile, rpackages.txt
+            Warns if not present: scripts, data
+        """
+        lint_obj = lint.RContainerLint(PATH_OPTIMAL_WORKING_EXAMPLE)
+        lint_obj.lint_rproject()
         expectations = {"failed": 0, "warned": 0, "passed": MAX_PASS_CHECKS}
         self.assess_lint_status(lint_obj, **expectations)
+    

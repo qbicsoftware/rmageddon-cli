@@ -2,7 +2,7 @@
 """ Linting code for QBiC R analysis environment
 checks.
 """
-
+import os
 import logging
 
 import click
@@ -41,3 +41,47 @@ class RContainerLint(object):
          Raises:
             If a critical problem is found, an AssertionError is raised.
         """
+        check_functions = [
+            'check_files_exist',
+            'check_dockerfile',
+            'check_rpackages'
+        ]
+
+        with click.progressbar(check_functions, label='Running R projects tests', item_show_func=repr) as fnames:
+            for fname in fnames:
+                getattr(self, fname)()
+                if len(self.failed) > 0:
+                    logging.error("Found test failures in '{}', halting lint run.".format(fname))
+                    break
+    
+    def check_files_exist(self):
+        files_fail = [
+            'Dockerfile',
+            'rpackages.txt'
+        ]
+        files_warn = [
+            'data',
+            'scripts'
+        ]
+
+        def pf(file_path):
+            return os.path.join(self.path, file_path)
+
+        for files in files_fail:
+            if not os.path.isfile(pf(files)):
+                self.failed.append((1, 'File {} not found.'.format(files)))
+            else:
+                self.passed.append((1, 'File {} found.'.format(files)))
+        
+        for files in files_warn:
+            if not os.path.isdir(pf(files)):
+                self.warned.append((1, 'Dir {} not found.'.format(files)))
+            else:
+                self.passed.append((1, 'Dir {} found.'.format(files)))
+        
+    
+    def check_dockerfile(self):
+        pass
+
+    def check_rpackages(self):
+        pass
