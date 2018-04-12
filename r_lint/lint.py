@@ -64,17 +64,14 @@ class RContainerLint(object):
             'scripts'
         ]
 
-        def pf(file_path):
-            return os.path.join(self.path, file_path)
-
         for files in files_fail:
-            if not os.path.isfile(pf(files)):
+            if not os.path.isfile(self.pf(files)):
                 self.failed.append((1, 'File {} not found.'.format(files)))
             else:
                 self.passed.append((1, 'File {} found.'.format(files)))
         
         for files in files_warn:
-            if not os.path.isdir(pf(files)):
+            if not os.path.isdir(self.pf(files)):
                 self.warned.append((1, 'Dir {} not found.'.format(files)))
             else:
                 self.passed.append((1, 'Dir {} found.'.format(files)))
@@ -87,7 +84,7 @@ class RContainerLint(object):
             - Import of the rpackages.txt
             - Some labels present
         """
-        with open(self.path, 'Dockerfile') as d_file: content = d_file.readlines()
+        with open(self.pf('Dockerfile')) as d_file: content = d_file.readlines()
         
         if not content:
             self.failed.append((2, 'Dockerfile seems to be empty.'))
@@ -116,15 +113,11 @@ class RContainerLint(object):
             self.passed.append((2, 'Base image \'r-base\' was found in the Dockerfile.'))
         else:
             self.failed.append((2, 'Container is not build from \'r-base\' image'))
-        
-
-
-            
-
-
-
-
-        pass
 
     def check_rpackages(self):
         pass
+    
+    def pf(self, file_path):
+        """ Quick path join helper method """
+        return os.path.join(self.path, file_path)
+
