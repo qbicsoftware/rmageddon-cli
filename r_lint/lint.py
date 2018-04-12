@@ -130,7 +130,6 @@ class RContainerLint(object):
             if len(content) > 1:
                 self.failed.append((3, 'Line {} seems to have more than one package defined.'.format(index)))
                 return
-        
         self.passed.append((3, 'R package list seems to be OK.'))
 
     def pf(self, file_path):

@@ -83,8 +83,8 @@ class TestLint(unittest.TestCase):
         included from r-base 
         """
         lint_obj = lint.RContainerLint(PATH_BAD_DOCKERFILE)
-        lint_obj.check_dockerfile()
-        expectations = {"failed": 1, "warned": 0, "passed": 0}
+        lint_obj.lint_rproject()
+        expectations = {"failed": 1, "warned": 2, "passed": 1}
         self.assess_lint_status(lint_obj, **expectations)
     
     def test_rpackage_empty_warn(self):
