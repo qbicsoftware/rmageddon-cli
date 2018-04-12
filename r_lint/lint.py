@@ -103,13 +103,13 @@ class RContainerLint(object):
                 base_img.append(line)
             if 'rpackage.txt' in line:
                 line = line.strip()
-                rpackage_def = []
+                rpackage_def.append(line)
         
         # 1. Evaluate the base image beeing from r-base
         if not base_img:
             self.failed.append((2, 'No base image was defined in the Dockerfile.'))
             return
-        if any('r-base' in base for base in base_img):
+        if any('r-base' in base for base in base_img[0].strip().split()):
             self.passed.append((2, 'Base image \'r-base\' was found in the Dockerfile.'))
         else:
             self.failed.append((2, 'Container is not build from \'r-base\' image'))

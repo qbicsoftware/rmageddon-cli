@@ -29,6 +29,7 @@ def pf(wd, path):
 WD = os.path.dirname(__file__)
 PATH_MINIMAL_WORKING_EXAMPLE = pf(WD, "lint_examples/minimal_working_example")
 PATH_OPTIMAL_WORKING_EXAMPLE = pf(WD, "lint_examples/awesome_working_example")
+PATH_BAD_EXAMPLE = pf(WD, "lint_examples/bad_example")
 # The maximum number of checks that can be passed
 MAX_PASS_CHECKS = 5
 
@@ -71,4 +72,8 @@ class TestLint(unittest.TestCase):
         """ Check if a Dockerfile has the correct base image
         included from r-base 
         """
-        pass
+        lint_obj = lint.RContainerLint(PATH_BAD_EXAMPLE)
+        lint_obj.check_dockerfile()
+        expectations = {"failed": 1, "warned": 0, "passed": 0}
+        self.assess_lint_status(lint_obj, **expectations)
+    
