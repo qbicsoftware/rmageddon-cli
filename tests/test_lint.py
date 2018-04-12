@@ -31,7 +31,7 @@ PATH_MINIMAL_WORKING_EXAMPLE = pf(WD, "lint_examples/minimal_working_example")
 PATH_OPTIMAL_WORKING_EXAMPLE = pf(WD, "lint_examples/awesome_working_example")
 PATH_BAD_EXAMPLE = pf(WD, "lint_examples/bad_example")
 # The maximum number of checks that can be passed
-MAX_PASS_CHECKS = 5
+MAX_PASS_CHECKS = 6
 
 class TestLint(unittest.TestCase):
     """ Class for lint tests """
@@ -77,3 +77,16 @@ class TestLint(unittest.TestCase):
         expectations = {"failed": 1, "warned": 0, "passed": 0}
         self.assess_lint_status(lint_obj, **expectations)
     
+    def test_rpackage_empty_warn(self):
+        """ Check if the rpackages.txt is empty """
+        lint_obj = lint.RContainerLint(PATH_BAD_EXAMPLE)
+        lint_obj.check_dockerfile()
+        expectations = {"failed": 1, "warned": 0, "passed": 0}
+        self.assess_lint_status(lint_obj, **expectations)
+    
+    def test_rpackage_pass(self):
+        """ Check if the rpackages.txt is formatted correctly """
+        lint_obj = lint.RContainerLint(PATH_MINIMAL_WORKING_EXAMPLE)
+        lint_obj.check_dockerfile()
+        expectations = {"failed": 0, "warned": 0, "passed": 1}
+        self.assess_lint_status(lint_obj, **expectations)

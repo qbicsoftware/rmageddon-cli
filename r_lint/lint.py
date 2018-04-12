@@ -115,8 +115,24 @@ class RContainerLint(object):
             self.failed.append((2, 'Container is not build from \'r-base\' image'))
 
     def check_rpackages(self):
-        pass
-    
+        """ Make some simple checks for the rpackages.txt,
+        like raise a warning, if it is empty and fail, if there
+        is more than one package listed per line.
+        """
+        with open(self.pf('rpackages.txt'), 'r') as fh: package_list = fh.read().splitlines() 
+        
+        if not package_list:
+            self.warned.append((3, 'The R package list seems to be empty.'))
+            return
+
+        for index, line in enumerate(package_list):
+            content = line.strip().split()
+            if len(content) > 1:
+                self.failed.append((3, 'Line {} seems to have more than one package defined.'.format(index)))
+                return
+        
+        self.passed.append((3, 'R package list seems to be OK.'))
+
     def pf(self, file_path):
         """ Quick path join helper method """
         return os.path.join(self.path, file_path)
