@@ -31,8 +31,9 @@ PATH_MINIMAL_WORKING_EXAMPLE = pf(WD, "lint_examples/minimal_working_example")
 PATH_OPTIMAL_WORKING_EXAMPLE = pf(WD, "lint_examples/awesome_working_example")
 PATH_BAD_EXAMPLE = pf(WD, "lint_examples/bad_example")
 PATH_BAD_DOCKERFILE = pf(WD, "lint_examples/corrupt_dockerfile_example")
+PATH_INCOMPLETE_DOCKERFILE = pf(WD, "lint_examples/missing_label_dockerfile_example")
 # The maximum number of checks that can be passed
-MAX_PASS_CHECKS = 6
+MAX_PASS_CHECKS = 7
 
 class TestLint(unittest.TestCase):
     """ Class for lint tests """
@@ -98,6 +99,19 @@ class TestLint(unittest.TestCase):
         """ Check if the rpackages.txt is formatted correctly """
         lint_obj = lint.RContainerLint(PATH_MINIMAL_WORKING_EXAMPLE)
         lint_obj.check_dockerfile()
-        expectations = {"failed": 0, "warned": 0, "passed": 1}
+        expectations = {"failed": 0, "warned": 0, "passed": 2}
         self.assess_lint_status(lint_obj, **expectations)
     
+    def test_labels_are_defined_properly_fail(self):
+        """ Check that the LABELs are set properly in the Dockerfile
+        We expect to have:
+            - maintainer
+            - version
+            - organization
+            - github
+        set.
+        """
+        lint_obj = lint.RContainerLint(PATH_INCOMPLETE_DOCKERFILE)
+        lint_obj.check_dockerfile()
+        expectations = {"failed": 1, "warned": 0, "passed": 1}
+        self.assess_lint_status(lint_obj, **expectations)

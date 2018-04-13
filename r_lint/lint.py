@@ -84,6 +84,7 @@ class RContainerLint(object):
             - Import of the rpackages.txt
             - Some labels present
         """
+
         with open(self.pf('Dockerfile')) as d_file: content = d_file.readlines()
         
         if not content:
@@ -97,7 +98,8 @@ class RContainerLint(object):
         for line in content:
             if 'LABEL' in line:
                 line = line.strip()
-                labels[line.split('=')[0].strip()] = line.split('=')[1].strip()
+                labelname = line.split('=')[0].strip().replace('LABEL ', '')
+                labels[labelname] = line.split('=')[1].strip()
             if 'FROM' in line:
                 line = line.strip()
                 base_img.append(line)
@@ -113,11 +115,29 @@ class RContainerLint(object):
             self.passed.append((2, 'Base image \'r-base\' was found in the Dockerfile.'))
         else:
             self.failed.append((2, 'Container is not build from \'r-base\' image'))
+            return
+
+        # 2. Evaluate the labels and if the required ones are present
+        expected_labels = [
+            'maintainer',
+            'version',
+            'organization',
+            'github'
+        ]
+        for label in expected_labels:
+            if not any(label == x for x in labels.keys()):
+                self.failed.append((2, 'You havent\'t set LABEL \'{}\' in the Dockerfile.'.format(label)))
+                return
+        self.passed.append((2, 'All labels set correctly in the Dockerfile'))
+        
 
     def check_rpackages(self):
         """ Make some simple checks for the rpackages.txt,
         like raise a warning, if it is empty and fail, if there
         is more than one package listed per line.
+
+        If there is such a thing as an RESTful API for CRAN/Bioconductor,
+        we should test if the packages exist.
         """
         with open(self.pf('rpackages.txt'), 'r') as fh: package_list = fh.read().splitlines() 
         
