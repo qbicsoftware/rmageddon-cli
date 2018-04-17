@@ -5,6 +5,7 @@ checks.
 import os
 import logging
 
+import yaml
 import click
 
 class RContainerLint(object):
@@ -13,6 +14,7 @@ class RContainerLint(object):
     def __init__(self, pipeline_dir):
         """ Init the linting object """
         self.path = pipeline_dir
+        self.conda_config = {}
         self.failed = []
         self.warned = []
         self.passed = []
@@ -44,7 +46,7 @@ class RContainerLint(object):
         check_functions = [
             'check_files_exist',
             'check_dockerfile',
-            'check_rpackages'
+            'check_conda_environment'
         ]
 
         with click.progressbar(check_functions, label='Running R projects tests', item_show_func=repr) as fnames:
@@ -57,7 +59,7 @@ class RContainerLint(object):
     def check_files_exist(self):
         files_fail = [
             'Dockerfile',
-            'rpackages.txt'
+            'environment.yml'
         ]
         files_warn = [
             'data',
@@ -76,6 +78,10 @@ class RContainerLint(object):
             else:
                 self.passed.append((1, 'Dir {} found.'.format(files)))
         
+        if os.path.isfile(self.pf('environment.yml')):
+            with open(self.pf('environment.yml'), 'r') as fh:
+                self.conda_config = yaml.load(fh)
+        
     
     def check_dockerfile(self):
         """ Check the Dockerfile not to be empty and fulfill
@@ -93,7 +99,7 @@ class RContainerLint(object):
 
         labels = {}
         base_img = []
-        rpackage_def = []
+        environment_def = []
 
         for line in content:
             if 'LABEL' in line:
@@ -103,15 +109,15 @@ class RContainerLint(object):
             if 'FROM' in line:
                 line = line.strip()
                 base_img.append(line)
-            if 'rpackage.txt' in line:
+            if 'environment.yml' in line:
                 line = line.strip()
-                rpackage_def.append(line)
+                environment_def.append(line)
         
         # 1. Evaluate the base image beeing from r-base
         if not base_img:
             self.failed.append((2, 'No base image was defined in the Dockerfile.'))
             return
-        if any('r-base' in base for base in base_img[0].strip().split()):
+        if any('continuumio/miniconda' in base for base in base_img[0].strip().split()):
             self.passed.append((2, 'Base image \'r-base\' was found in the Dockerfile.'))
         else:
             self.failed.append((2, 'Container is not build from \'r-base\' image'))
@@ -131,7 +137,7 @@ class RContainerLint(object):
         self.passed.append((2, 'All labels set correctly in the Dockerfile'))
         
 
-    def check_rpackages(self):
+    def check_conda_environment(self):
         """ Make some simple checks for the rpackages.txt,
         like raise a warning, if it is empty and fail, if there
         is more than one package listed per line.
@@ -139,18 +145,9 @@ class RContainerLint(object):
         If there is such a thing as an RESTful API for CRAN/Bioconductor,
         we should test if the packages exist.
         """
-        with open(self.pf('rpackages.txt'), 'r') as fh: package_list = fh.read().splitlines() 
-        
-        if not package_list:
-            self.warned.append((3, 'The R package list seems to be empty.'))
-            return
+        if not self.conda_config: return
 
-        for index, line in enumerate(package_list):
-            content = line.strip().split()
-            if len(content) > 1:
-                self.failed.append((3, 'Line {} seems to have more than one package defined.'.format(index)))
-                return
-        self.passed.append((3, 'R package list seems to be OK.'))
+        self.passed.append((3, 'The conda environment.yml list seems to be OK.'))
 
     def pf(self, file_path):
         """ Quick path join helper method """

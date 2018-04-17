@@ -1,4 +1,4 @@
-FROM r-base:3.2.4
+FROM continuumio/miniconda
 
 LABEL maintainer="{{ cookiecutter.author_name }}" <"{{ cookiecutter.author_email  }}">  
 LABEL version="{{ cookiecutter.container_version }}"
