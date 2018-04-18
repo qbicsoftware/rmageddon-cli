@@ -41,10 +41,11 @@ class TestBuilder(unittest.TestCase):
     def test_rpackage_parsing_and_warn(self):
         """ Parse a r package file and warn if empty """
         builder_obj = builder.EnvBuilder(
-            pf(PATH_GOOD_R_PKS, "rpackages.txt"),
+            pf(PATH_EMPTY_R_PKS, "rpackages.txt"),
             pf(PATH_GOOD_CONDA_ENV, "environment.yml")
         )
         builder_obj.check_rpkgs()
         expectations = {"passed": 0, "warned":1, "failed":0}
+        self.assess_lint_status(builder_obj, **expectations)
 
         
