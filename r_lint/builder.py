@@ -13,7 +13,10 @@ and for 'anaconda' it is:
     bioconductor-<bioconductor pkg name>
 """
 
+import logging
+
 import yaml
+import click
 
 class EnvBuilder(object):
 
@@ -22,6 +25,9 @@ class EnvBuilder(object):
         to read a R package list and tries to translate it
         to conda dependencies
         """
+        self.failed = []
+        self.warned = []
+        self.passed = []
         self.conda_env = self.parse_conda_env(conda_env)
         self.rpackages = self.parse_package_list(rpackages)
 
@@ -31,7 +37,24 @@ class EnvBuilder(object):
         and annotates it accordingly in the conda environment
         config file
         """
-        pass
+        check_functions = [
+            'check_rpkgs'
+        ]
+
+        with click.progressbar(check_functions,
+                label='Running R package resolve tasks', item_show_func=repr) as fnames:
+            for fname in fnames:
+                getattr(self, fname)()
+                if len(self.failed) > 0:
+                    logging.error("Found test failures in '{}', \
+                    halting lint run.".format(fname))
+                    break
+
+    def check_rpkgs(self):
+        """ Check the rpackage list against the openbis API """
+        if not self.rpackages:
+            self.warned.append((2, "The R package file seems to be empty."))
+            return
     
     def parse_conda_env(self, conda_env):
         with open(conda_env, 'r') as stream:

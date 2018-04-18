@@ -55,5 +55,16 @@ def build(rpackages, conda_env):
 
 
 if __name__ == '__main__':
+    print("""
+ ______     __         __     __   __     ______  
+/\  == \   /\ \       /\ \   /\ "-.\ \   /\__  _\ 
+\ \  __<   \ \ \____  \ \ \  \ \ \-.  \  \/_/\ \/ 
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \"\_\    \ \_\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/ \/_/     \/_/ 
+                                                  
+2018, QBiC software, Sven Fillinger
+sven.fillinger@qbic.uni-tuebingen.de
+
+    """)
     r_lint_cli()
 
