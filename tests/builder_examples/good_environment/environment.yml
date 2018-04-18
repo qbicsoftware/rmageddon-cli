@@ -1,0 +1,8 @@
+name: qbicsoftware-QTEST123AE-ranalyses-1.0
+channels:
+  - bioconda
+  - r
+  - defaults
+dependencies:
+  - r-base=3.4.3
+  - r-ggplot2
