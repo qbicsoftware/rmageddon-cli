@@ -35,6 +35,24 @@ def lint(pipeline_dir):
 
     lint_obj = r_lint.lint.RContainerLint(pipeline_dir)
 
+@r_lint_cli.command()
+@click.argument(
+    'rpackages',
+    type = click.Path(exists=True),
+    required = True,
+    metavar = "<R package list>"
+)
+@click.argument(
+    'conda_env',
+    type = click.Path(exists=True),
+    required = True,
+    metavar = "<conda environment file>"
+)
+def build(rpackages, conda_env):
+    """ Resolve R packages resources from Anaconda cloud """
+
+    env_builder = r_lint.builder.EnvBuilder(rpackages, conda_env)
+
 
 if __name__ == '__main__':
     r_lint_cli()

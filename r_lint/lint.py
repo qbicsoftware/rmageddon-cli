@@ -3,6 +3,7 @@
 checks.
 """
 import os
+import re
 import logging
 
 import yaml
@@ -146,6 +147,12 @@ class RContainerLint(object):
         we should test if the packages exist.
         """
         if not self.conda_config: return
+
+
+        # 1. Check the name regex
+        # qbicsoftware-<projectcode>-ranalyses-<version>
+        env_name = r"qbicsoftware-Q[A-Z]{4}[0-9]{3}[A-Z0-9]{2}-ranalyses"
+        match = re.search(env_name, self.conda_config.get("name"))
 
         self.passed.append((3, 'The conda environment.yml list seems to be OK.'))
 
