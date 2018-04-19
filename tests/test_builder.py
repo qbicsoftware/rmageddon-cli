@@ -45,7 +45,19 @@ class TestBuilder(unittest.TestCase):
             pf(PATH_GOOD_CONDA_ENV, "environment.yml")
         )
         builder_obj.check_rpkgs()
-        expectations = {"passed": 0, "warned":1, "failed":0}
+        expectations = {"passed": 0, "warned": 1, "failed": 0}
         self.assess_lint_status(builder_obj, **expectations)
+    
+    def test_rpackage_resolving_and_pass(self):
+        """ Try to resolve a given R package dependency from either
+        Anaconda's 'r'- or 'bioconda'-channel """
+        builder_obj = builder.EnvBuilder(
+            pf(PATH_GOOD_R_PKS, "rpackages.txt"),
+            pf(PATH_GOOD_CONDA_ENV, "environment.yml")
+        )
+        builder_obj.check_rpkgs()
+        expectations = {"passed": 2, "warned": 1, "failed": 0}
+        self.assess_lint_status(builder_obj, **expectations)
+
 
         

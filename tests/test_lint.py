@@ -44,7 +44,8 @@ class TestLint(unittest.TestCase):
         for list_type, expect in expected.items():
             observed = len(getattr(lint_obj, list_type))
             oberved_list = yaml.safe_dump(getattr(lint_obj, list_type))
-            self.assertEqual(observed, expect, "Expected {} tests in '{}', but found {}.\n{}".format(expect, list_type.upper(), observed, oberved_list))
+            self.assertEqual(observed, expect, "Expected {} tests in '{}', \
+                but found {}.\n{}".format(expect, list_type.upper(), observed, oberved_list))
     
     def test_read_dir_content_and_pass(self):
         """ Check if the dir contains several files/dirs.
