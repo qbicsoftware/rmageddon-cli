@@ -6,7 +6,7 @@ import os
 import re
 import logging
 
-import yaml
+from ruamel.yaml import YAML
 import click
 
 class RContainerLint(object):
@@ -81,6 +81,7 @@ class RContainerLint(object):
         
         if os.path.isfile(self.pf('environment.yml')):
             with open(self.pf('environment.yml'), 'r') as fh:
+                yaml=YAML()
                 self.conda_config = yaml.load(fh)
         
     
