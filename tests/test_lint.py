@@ -12,9 +12,9 @@ Provide example project contents like:
             |--test_lint.py
 """
 import os
-import yaml
-import unittest
 
+import unittest
+from ruamel.yaml import YAML
 import r_lint.lint as lint
 
 def listfiles(path):
@@ -43,7 +43,8 @@ class TestLint(unittest.TestCase):
         object status lists"""
         for list_type, expect in expected.items():
             observed = len(getattr(lint_obj, list_type))
-            oberved_list = yaml.safe_dump(getattr(lint_obj, list_type))
+            yaml = YAML(typ='safe')
+            observed_list = yaml.dump(getattr(lint_obj, list_type), sys.stdout)
             self.assertEqual(observed, expect, "Expected {} tests in '{}', \
                 but found {}.\n{}".format(expect, list_type.upper(), observed, oberved_list))
     
