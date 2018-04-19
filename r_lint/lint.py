@@ -161,3 +161,16 @@ class RContainerLint(object):
         """ Quick path join helper method """
         return os.path.join(self.path, file_path)
 
+    def print_results(self):
+        # Print results
+        logging.info("===========\n BUILD RESULTS\n=================\n" +
+            "{0:>4} tests passed".format(len(self.passed)) +
+            "{0:>4} tests had warnings".format(len(self.warned)) +
+            "{0:>4} tests failed".format(len(self.failed))
+        )
+        if len(self.passed) > 0:
+            logging.debug("Test Passed:\n  {}".format("\n  ".join(["#{}: {}".format(eid, msg) for eid, msg in self.passed])))
+        if len(self.warned) > 0:
+            logging.warn("Test Warnings:\n  {}".format("\n  ".join(["#{}: {}".format(eid, msg) for eid, msg in self.warned])))
+        if len(self.failed) > 0:
+            logging.error("Test Failures:\n  {}".format("\n  ".join(["#{}: {}".format(eid, msg) for eid, msg in self.failed])))

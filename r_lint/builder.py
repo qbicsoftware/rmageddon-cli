@@ -13,6 +13,7 @@ and for 'anaconda' it is:
     bioconductor-<bioconductor pkg name>
 """
 
+import os
 import requests
 import logging
 
@@ -124,7 +125,8 @@ class EnvBuilder(object):
     def dump_conda_env(self):
         """ Dump the new conda config in the current working dir
         as a new environment.yml file """
-        with open("environment.yml", "w") as stream:
+        output = os.path.join(os.getcwd(), "environment.yml")
+        with open(output, "w") as stream:
             yaml = YAML()
             yaml.indent(mapping=2, sequence=4, offset=2)
             yaml.dump(self.conda_env, stream)
@@ -139,3 +141,17 @@ class EnvBuilder(object):
         with open(rpackages, 'r') as stream:
             packages = stream.read().splitlines()
         return packages
+
+    def print_results(self):
+        # Print results
+        logging.info("===========\n BUILD RESULTS\n=================\n" +
+            "{0:>4} build steps passed".format(len(self.passed)) +
+            "{0:>4} build steps had warnings".format(len(self.warned)) +
+            "{0:>4} build steps failed".format(len(self.failed))
+        )
+        if len(self.passed) > 0:
+            logging.debug("Test Passed:\n  {}".format("\n  ".join(["#{}: {}".format(eid, msg) for eid, msg in self.passed])))
+        if len(self.warned) > 0:
+            logging.warn("Test Warnings:\n  {}".format("\n  ".join(["#{}: {}".format(eid, msg) for eid, msg in self.warned])))
+        if len(self.failed) > 0:
+            logging.error("Test Failures:\n  {}".format("\n  ".join(["#{}: {}".format(eid, msg) for eid, msg in self.failed])))
