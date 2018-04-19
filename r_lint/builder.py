@@ -115,7 +115,7 @@ class EnvBuilder(object):
 
         if not self.conda_env.get("dependencies"): self.conda_env["dependencies"] = []
             
-        for pkg, pkg_ch_def in self.resolved.items():
+        for pkg_ch_def in self.resolved.values():
             if not pkg_ch_def.split('::')[-1] in self.conda_env["dependencies"]:
                 self.conda_env["dependencies"].append(pkg_ch_def.split('::')[-1])
                 self.passed.append((3, "Added {pkg} to the conda dependency list.".format(
