@@ -16,7 +16,7 @@ and for 'anaconda' it is:
 import requests
 import logging
 
-import yaml
+from ruamel.yaml import YAML
 import click
 
 class EnvBuilder(object):
@@ -40,7 +40,9 @@ class EnvBuilder(object):
         config file
         """
         check_functions = [
-            'check_rpkgs'
+            'check_rpkgs',
+            'extend_conda_env',
+            'dump_conda_env'
         ]
 
         with click.progressbar(check_functions,
@@ -93,12 +95,10 @@ class EnvBuilder(object):
                             ))
                         )
                         break
-                    else:
-                        self.resolved[rpackage] = ""
 
         # Check for packages that could not have been resolved
-        unresolved_pkgs = list([pkg for pkg, pkg_name_ch in self.resolved.items() 
-            if not pkg_name_ch])
+        unresolved_pkgs = list([pkg for pkg in self.rpackages 
+            if not self.resolved.get(pkg)])
         
         # And report them
         for pkg in unresolved_pkgs:
@@ -106,20 +106,32 @@ class EnvBuilder(object):
                 "Could not resolve package {pkg} on Anaconda cloud.".format(
                     pkg = pkg
                 )
-            ))
-        
-
-                        
-
-
-
-
-
-        
-        
+            ))      
     
+    def extend_conda_env(self):
+        """ Take the resolved R packages and append them to the dependency
+        list in the conda environment config """
+
+        if not self.conda_env.get("dependencies"): self.conda_env["dependencies"] = []
+            
+        for pkg, pkg_ch_def in self.resolved.items():
+            if not pkg_ch_def.split('::')[-1] in self.conda_env["dependencies"]:
+                self.conda_env["dependencies"].append(pkg_ch_def.split('::')[-1])
+                self.passed.append((3, "Added {pkg} to the conda dependency list.".format(
+                    pkg = pkg_ch_def.split('::')[-1]
+            )))
+
+    def dump_conda_env(self):
+        """ Dump the new conda config in the current working dir
+        as a new environment.yml file """
+        with open("environment.yml", "w") as stream:
+            yaml = YAML()
+            yaml.indent(mapping=2, sequence=4, offset=2)
+            yaml.dump(self.conda_env, stream)
+
     def parse_conda_env(self, conda_env):
         with open(conda_env, 'r') as stream:
+            yaml = YAML()
             data = yaml.load(stream)
         return data
 

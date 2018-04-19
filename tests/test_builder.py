@@ -1,9 +1,10 @@
 #!/usr/env/bin python
 
 import os
+import sys
 import unittest
 
-import yaml
+from ruamel.yaml import YAML
 import r_lint.builder as builder
 
 def pf(wd, path):
@@ -25,7 +26,8 @@ class TestBuilder(unittest.TestCase):
         object status lists"""
         for list_type, expect in expected.items():
             observed = len(getattr(lint_obj, list_type))
-            observed_list = yaml.safe_dump(getattr(lint_obj, list_type))
+            yaml = YAML(typ='safe')
+            observed_list = yaml.dump(getattr(lint_obj, list_type), sys.stdout)
             self.assertEqual(observed, expect, "Expected {} tests in '{}' \
                 , but found {}.\n{}"
                 .format(expect, list_type.upper(), observed, observed_list))
@@ -59,5 +61,17 @@ class TestBuilder(unittest.TestCase):
         expectations = {"passed": 2, "warned": 1, "failed": 0}
         self.assess_lint_status(builder_obj, **expectations)
 
-
+    def test_conda_env_extension(self):
+        """ Check, that resolved R packages are listed as dependencies in the 
+        environment.yml """
+        builder_obj = builder.EnvBuilder(
+            pf(PATH_GOOD_R_PKS, "rpackages.txt"),
+            pf(PATH_GOOD_CONDA_ENV, "environment.yml")
+        )
+        builder_obj.check_rpkgs()
+        builder_obj.extend_conda_env()
+        expectations = {"passed": 3, "warned": 1, "failed": 0}
+        self.assess_lint_status(builder_obj, **expectations)
+        self.assertEquals(len(builder_obj.conda_env.get("dependencies")),
+            3)
         
