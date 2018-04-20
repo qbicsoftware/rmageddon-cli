@@ -1,7 +1,7 @@
-name: qbicsoftware-QTEST-ranalyses-1.0
+
+name: qbicsoftware-myProject-ranalyses-1.0
 channels:
   - bioconda
-  - r
   - defaults
 dependencies:
   - r-base=3.4.3

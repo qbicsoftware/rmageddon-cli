@@ -6,7 +6,7 @@ import os
 import re
 import logging
 
-from ruamel.yaml import YAML
+import yaml
 import click
 
 class RContainerLint(object):
@@ -86,9 +86,7 @@ class RContainerLint(object):
         
         if os.path.isfile(self.pf('environment.yml')):
             with open(self.pf('environment.yml'), 'r') as fh:
-                yaml=YAML()
                 self.conda_config = yaml.load(fh)
-        
     
     def check_dockerfile(self):
         """ Check the Dockerfile not to be empty and fulfill
@@ -152,15 +150,55 @@ class RContainerLint(object):
         If there is such a thing as an RESTful API for CRAN/Bioconductor,
         we should test if the packages exist.
         """
-        if not self.conda_config: return
+        if not os.path.isfile(self.pf('environment.yml')): return
+        
+        
+        # Define the mandatory conda declarations
+        mand_conda_settings = [
+            'name',
+            'channels',
+            'dependencies'
+        ]
+        # Define the mandatory conda channels (min. requirement)
+        mand_channel_settings = [
+            'defaults',
+            'r'
+        ]
 
+        print(self.conda_config)
 
-        # 1. Check the name regex
+        # Check that the mandatory conda env declarations are there
+        for declaration in mand_conda_settings:
+            if not self.conda_config.get(declaration):
+                self.failed.append((3, "The conda env declaration \'{dec}\' is missing.".format(
+                    dec = declaration
+                )))
+        
+        # Check the name regex
         # qbicsoftware-<projectcode>-ranalyses-<version>
-        env_name = r"qbicsoftware-Q[A-Z]{4}[0-9]{3}[A-Z0-9]{2}-ranalyses"
+        env_name = r"qbicsoftware-Q[A-Z0-9]{4}-ranalyses"
         match = re.search(env_name, self.conda_config.get("name"))
+        if not match:
+            self.failed.append((3, "The conda environment name was not set properly. \
+            Make sure, it follows the guidelines."))
+        
+        # Check that channels 'default' and 'r' are present
+        missing_channels = list([ch for ch in mand_channel_settings 
+            if not ch in self.conda_config.get('channels')])
 
-        self.passed.append((3, 'The conda environment.yml list seems to be OK.'))
+        for ch in missing_channels:
+            self.failed.append((3, "Channel {ch} was not defined.".format(ch = ch)))
+
+        # Check that the dependency for r-base is there, and a version is set.
+        rbase = list([basepkg for basepkg in self.conda_config.get("dependencies") if 'r-base' in basepkg])
+        if not rbase:
+            self.failed.append((3, "Could not find the \'r-base\' dependency."))
+            return
+
+        # Check that a version is given for the r-base pkg
+        if not '=' in rbase[0]:
+            self.failed.append((3, "Could not determine that \'r-base\' has a version tag."))
+
 
     def pf(self, file_path):
         """ Quick path join helper method """

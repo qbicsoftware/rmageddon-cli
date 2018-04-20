@@ -118,3 +118,20 @@ class TestLint(unittest.TestCase):
         lint_obj.check_dockerfile()
         expectations = {"failed": 1, "warned": 0, "passed": 1}
         self.assess_lint_status(lint_obj, **expectations)
+    
+    def test_conda_env_file_for_name_and_fail(self):
+        """ Check that the conda env file has a name property and that it
+        follows a certain regex, fail if not """
+        lint_obj = lint.RContainerLint(PATH_BAD_EXAMPLE)
+        lint_obj.check_conda_environment()
+        expectations = {"failed": 1, "warned": 0, "passed": 0}
+        self.assess_lint_status(lint_obj, **expectations)
+    
+    def test_conda_env_file_for_channels_and_fail(self):
+        """ Check that the conda env file has a name property and that it
+        follows a certain regex, fail if not """
+        lint_obj = lint.RContainerLint(PATH_BAD_EXAMPLE)
+        lint_obj.check_conda_environment()
+        expectations = {"failed": 2, "warned": 0, "passed": 0}
+        self.assess_lint_status(lint_obj, **expectations)
+    
