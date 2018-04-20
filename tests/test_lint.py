@@ -132,6 +132,6 @@ class TestLint(unittest.TestCase):
         follows a certain regex, fail if not """
         lint_obj = lint.RContainerLint(PATH_BAD_EXAMPLE)
         lint_obj.check_conda_environment()
-        expectations = {"failed": 2, "warned": 0, "passed": 0}
+        expectations = {"failed": 1, "warned": 0, "passed": 0}
         self.assess_lint_status(lint_obj, **expectations)
     

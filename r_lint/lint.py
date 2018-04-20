@@ -84,10 +84,7 @@ class RContainerLint(object):
             else:
                 self.passed.append((1, 'Dir {} found.'.format(files)))
         
-        if os.path.isfile(self.pf('environment.yml')):
-            with open(self.pf('environment.yml'), 'r') as fh:
-                self.conda_config = yaml.load(fh)
-    
+        
     def check_dockerfile(self):
         """ Check the Dockerfile not to be empty and fulfill
         some basic checks:
@@ -151,7 +148,9 @@ class RContainerLint(object):
         we should test if the packages exist.
         """
         if not os.path.isfile(self.pf('environment.yml')): return
-        
+    
+        with open(self.pf('environment.yml'), 'r') as fh:
+            self.conda_config = yaml.load(fh)
         
         # Define the mandatory conda declarations
         mand_conda_settings = [
@@ -165,22 +164,22 @@ class RContainerLint(object):
             'r'
         ]
 
-        print(self.conda_config)
-
         # Check that the mandatory conda env declarations are there
         for declaration in mand_conda_settings:
             if not self.conda_config.get(declaration):
                 self.failed.append((3, "The conda env declaration \'{dec}\' is missing.".format(
                     dec = declaration
                 )))
+                return
         
         # Check the name regex
         # qbicsoftware-<projectcode>-ranalyses-<version>
         env_name = r"qbicsoftware-Q[A-Z0-9]{4}-ranalyses"
-        match = re.search(env_name, self.conda_config.get("name"))
+        match = re.search(env_name, self.conda_config.get('name'))
         if not match:
             self.failed.append((3, "The conda environment name was not set properly. \
             Make sure, it follows the guidelines."))
+            return
         
         # Check that channels 'default' and 'r' are present
         missing_channels = list([ch for ch in mand_channel_settings 
@@ -188,6 +187,7 @@ class RContainerLint(object):
 
         for ch in missing_channels:
             self.failed.append((3, "Channel {ch} was not defined.".format(ch = ch)))
+            return
 
         # Check that the dependency for r-base is there, and a version is set.
         rbase = list([basepkg for basepkg in self.conda_config.get("dependencies") if 'r-base' in basepkg])
@@ -199,6 +199,7 @@ class RContainerLint(object):
         if not '=' in rbase[0]:
             self.failed.append((3, "Could not determine that \'r-base\' has a version tag."))
 
+        self.passed.append((3, 'The conda environment seems to be OK.'))
 
     def pf(self, file_path):
         """ Quick path join helper method """
