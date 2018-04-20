@@ -58,6 +58,11 @@ class RContainerLint(object):
                     break
     
     def check_files_exist(self):
+        """ Check, that files like Dockerfile and the conda
+        environment.yml exists, and report a failing test, if not.
+        Directories like 'data' and 'scripts' are obligatory for the moment, 
+        and only a warning is raised, if they are not present """
+
         files_fail = [
             'Dockerfile',
             'environment.yml'
@@ -120,9 +125,9 @@ class RContainerLint(object):
             self.failed.append((2, 'No base image was defined in the Dockerfile.'))
             return
         if any('continuumio/miniconda' in base for base in base_img[0].strip().split()):
-            self.passed.append((2, 'Base image \'r-base\' was found in the Dockerfile.'))
+            self.passed.append((2, 'Base image \'continuumio/miniconda\' was found in the Dockerfile.'))
         else:
-            self.failed.append((2, 'Container is not build from \'r-base\' image'))
+            self.failed.append((2, 'Container is not build from \'continuumio/miniconda\' image'))
             return
 
         # 2. Evaluate the labels and if the required ones are present
