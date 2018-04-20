@@ -135,3 +135,46 @@ class TestLint(unittest.TestCase):
         expectations = {"failed": 1, "warned": 0, "passed": 0}
         self.assess_lint_status(lint_obj, **expectations)
     
+    def test_conda_env_file_no_rversion_tag(self):
+        """ Check that the conda env file has a name property and that it
+        follows a certain regex, fail if not """
+        lint_obj = lint.RContainerLint(PATH_BAD_EXAMPLE)
+        lint_obj.check_files_exist()
+        yaml = YAML()
+        lint_obj.conda_config = yaml.load(
+            """
+            name: qbicsoftware-QTEST-ranalyses-1.0
+            channels:
+                - bioconda
+                - r
+                - defaults
+            dependencies:
+                - r-base
+                - r-ggplot2
+            """
+        )
+        lint_obj.check_conda_environment()
+        expectations = {"failed": 1, "warned": 2, "passed": 2}
+        self.assess_lint_status(lint_obj, **expectations)
+
+    def test_conda_env_file_wrong_rversion_tag(self):
+        """ Check that the conda env file has a name property and that it
+        follows a certain regex, fail if not """
+        lint_obj = lint.RContainerLint(PATH_BAD_EXAMPLE)
+        lint_obj.check_files_exist()
+        yaml = YAML()
+        lint_obj.conda_config = yaml.load(
+            """
+            name: qbicsoftware-QTEST-ranalyses-1.0
+            channels:
+                - bioconda
+                - r
+                - defaults
+            dependencies:
+                - r-base=1.0dev
+                - r-ggplot2
+            """
+        )
+        lint_obj.check_conda_environment()
+        expectations = {"failed": 1, "warned": 2, "passed": 2}
+        self.assess_lint_status(lint_obj, **expectations)

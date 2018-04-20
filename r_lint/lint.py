@@ -6,7 +6,7 @@ import os
 import re
 import logging
 
-import yaml
+from ruamel.yaml import YAML
 import click
 
 class RContainerLint(object):
@@ -84,6 +84,11 @@ class RContainerLint(object):
             else:
                 self.passed.append((1, 'Dir {} found.'.format(files)))
         
+        if os.path.isfile(self.pf('environment.yml')):
+            with open(self.pf('environment.yml'), 'r') as fh:
+                yaml = YAML()
+                self.conda_config = yaml.load(fh)
+
         
     def check_dockerfile(self):
         """ Check the Dockerfile not to be empty and fulfill
@@ -149,8 +154,6 @@ class RContainerLint(object):
         """
         if not os.path.isfile(self.pf('environment.yml')): return
     
-        with open(self.pf('environment.yml'), 'r') as fh:
-            self.conda_config = yaml.load(fh)
         
         # Define the mandatory conda declarations
         mand_conda_settings = [
@@ -198,8 +201,19 @@ class RContainerLint(object):
         # Check that a version is given for the r-base pkg
         if not '=' in rbase[0]:
             self.failed.append((3, "Could not determine that \'r-base\' has a version tag."))
-
+            return
+            
+        # Check that the version is numeric
+        version = rbase[0].strip().split('=')[-1].replace('.', '')
+        if not version.isdigit():
+            self.failed.append((3, "The version tag \'{tag}\' was not numeric!".format(
+                tag = rbase[0].strip().split('=')[-1]
+            )))
+            return
+        
         self.passed.append((3, 'The conda environment seems to be OK.'))
+
+
 
     def pf(self, file_path):
         """ Quick path join helper method """
