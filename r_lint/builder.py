@@ -64,41 +64,50 @@ class EnvBuilder(object):
         # Define the conda channels in which to search for R packages
         channels = {
             'r': 'r',
-            'bioconda': 'bioconductor'
+            'bioconda': 'bioconductor',
+            'conda-forge': 'r'
         }
 
-        for rpackage in self.rpackages:
+        for pkgInfo in self.rpackages:
+            name, version = pkgInfo
             for channel in channels.keys():
                 anaconda_url = "https://api.anaconda.org/package/{ch}/{pkg}".format(
                     ch = channel,
                     pkg = "{prefix}-{pkg}".format(
                         prefix = channels.get(channel),
-                        pkg = rpackage
+                        pkg = name.lower()
                         )
                 )
                 try:
                     resp = requests.get(anaconda_url, timeout=10)
                 except (requests.exceptions.Timeout):
                     self.warned.append((2, "Server Timout! Package {pkg} could not be resolved.".format(
-                       pkg = rpackage 
+                       pkg = name.lower()
                     )))
                 else:
                     if resp.status_code == 200:
-                        self.resolved[rpackage] = "{ch}::{prefix}-{pkg}".format(
+                        body = resp.json()
+                        available_versions = body["versions"]
+                        if not version in available_versions:
+                            self.warned.append((2, "No version {version} for package {name} on Anaconda cloud."
+                            "\nOnly versions {version_list} are available".format(version=version, name=name, version_list=available_versions)))
+                            version = ""
+                        self.resolved[name] = "{ch}::{prefix}-{pkg}{ver}".format(
                             ch = channel,
                             prefix = channels.get(channel),
-                            pkg = rpackage
+                            pkg = name.lower(),
+                            ver = "={version}".format(version=version) if version else ""
                             )
                         self.passed.append(
-                            (2, "Package {pkg} resolved in channel {channel}".format(
-                                pkg = rpackage,
+                            ((2, "Package {pkg} resolved in channel {channel}".format(
+                                pkg = name,
                                 channel = channel
-                            ))
+                            )))
                         )
                         break
 
         # Check for packages that could not have been resolved
-        unresolved_pkgs = list([pkg for pkg in self.rpackages 
+        unresolved_pkgs = list([name for pkg, version in self.rpackages 
             if not self.resolved.get(pkg)])
         
         # And report them
@@ -138,8 +147,33 @@ class EnvBuilder(object):
         return data
 
     def parse_package_list(self, rpackages):
-        with open(rpackages, 'r') as stream:
-            packages = stream.read().splitlines()
+        """ Parses a file with R package info and tries to find package and version.
+
+        The input file format must have the keywords 'Package: <name>' followed by
+        a new line with "Version: <version>", in order to find packages.
+
+        Returns a list with tuples of package name and version.
+        """
+        packages = []
+        with open(rpackages, 'r') as stream: content = stream.readlines()
+        name, version = "", ""
+        for line in content:
+            if 'Package:' in line:
+                try:
+                    name = line.split(':')[1].strip()
+                except Exception:
+                    self.warned.append((1, "Could not parse Package info out of line:\n {}".format(line)))
+            if 'Version:' in line:
+                try:
+                    version = line.split(':')[1].strip()
+                except Exception:
+                    self.warned.append((1, "Could not parse Package info out of line:\n {}".format(line)))
+            if name and version:
+                self.passed.append((1, "Found package \'{}\' with version \'{}\'.".format(name, version)))
+                packages.append((name, version))
+                name, version = "", ""
+        if not packages:
+            self.warned.append((1, "No packages have been parsed."))
         return packages
 
     def print_results(self):
