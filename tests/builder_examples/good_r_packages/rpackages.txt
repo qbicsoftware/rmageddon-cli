@@ -1,3 +1,29 @@
-pathview
-ggplot2
-idonotexist
+$edgeR
+Package: edgeR
+Version: 3.22.2
+Date: 2018-05-23
+Title: Empirical Analysis of Digital Gene Expression Data in R
+Description: Differential expression analysis of RNA-seq expression profiles with biological replication. Implements a range of
+              statistical methodology based on the negative binomial distributions, including empirical Bayes estimation, exact
+              tests, generalized linear models and quasi-likelihood tests. As well as RNA-seq, it be applied to differential
+              signal analysis of other types of genomic data that produce counts, including ChIP-seq, Bisulfite-seq, SAGE and
+              CAGE.
+Author: Yunshun Chen <yuchen@wehi.edu.au>, Aaron Lun <alun@wehi.edu.au>, Davis McCarthy <dmccarthy@wehi.edu.au>, Xiaobei Zhou
+              <xiaobei.zhou@uzh.ch>, Mark Robinson <mark.robinson@imls.uzh.ch>, Gordon Smyth <smyth@wehi.edu.au>
+Maintainer: Yunshun Chen <yuchen@wehi.edu.au>, Aaron Lun <alun@wehi.edu.au>, Mark Robinson <mark.robinson@imls.uzh.ch>, Davis
+              McCarthy <dmccarthy@wehi.edu.au>, Gordon Smyth <smyth@wehi.edu.au>
+License: GPL (>=2)
+Depends: R (>= 2.15.0), limma (>= 3.34.5)
+Imports: graphics, stats, utils, methods, locfit, Rcpp
+Suggests: AnnotationDbi, org.Hs.eg.db, splines
+LinkingTo: Rcpp
+URL: http://bioinf.wehi.edu.au/edgeR
+biocViews: GeneExpression, Transcription, AlternativeSplicing, Coverage, DifferentialExpression, DifferentialSplicing,
+              DifferentialMethylation, GeneSetEnrichment, Pathways, Genetics, DNAMethylation, Bayesian, Clustering, ChIPSeq,
+              Regression, TimeCourse, Sequencing, RNASeq, BatchEffect, SAGE, Normalization, QualityControl, MultipleComparison
+NeedsCompilation: yes
+SystemRequirements: C++11
+Packaged: 2018-05-23 22:59:00 UTC; biocbuild
+Built: R 3.5.0; x86_64-pc-linux-gnu; 2018-06-04 12:14:44 UTC; unix
+
+-- File: /home/sven1103/R/x86_64-pc-linux-gnu-library/3.5/edgeR/Meta/package.rds
