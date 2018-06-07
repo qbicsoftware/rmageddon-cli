@@ -53,7 +53,7 @@ class TestLint(unittest.TestCase):
         """ Check if the dir contains several files/dirs.
             Minimal example for passing.
 
-            Fails if not present: Dockerfile, rpackages.txt
+            Fails if not present: Dockerfile, environment.yml
             Warns if not present: scripts, data
         """
         lint_obj = lint.RContainerLint(PATH_MINIMAL_WORKING_EXAMPLE)
@@ -108,6 +108,7 @@ class TestLint(unittest.TestCase):
     def test_labels_are_defined_properly_fail(self):
         """ Check that the LABELs are set properly in the Dockerfile
         We expect to have:
+            - name
             - maintainer
             - version
             - organization

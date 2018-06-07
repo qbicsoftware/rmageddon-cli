@@ -132,6 +132,7 @@ class RContainerLint(object):
 
         # 2. Evaluate the labels and if the required ones are present
         expected_labels = [
+            'name',
             'maintainer',
             'version',
             'organization',
