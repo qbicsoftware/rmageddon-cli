@@ -1,8 +1,8 @@
 R-lint
 ======
 
-.. image:: https://travis-ci.org/qbicsoftware/qbic-r-lint.svg?branch=master
-    :target: https://travis-ci.org/qbicsoftware/qbic-r-lint
+.. image:: https://travis-ci.org/qbicsoftware/r-lint-cli.svg?branch=master
+    :target: https://travis-ci.org/qbicsoftware/r-lint-cli
 
 .. image:: https://codecov.io/gh/qbicsoftware/qbic-r-lint/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/qbicsoftware/qbic-r-lint
