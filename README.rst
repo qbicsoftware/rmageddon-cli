@@ -23,6 +23,32 @@ Motivation
     All containers there passed the linting and have been build with `Rmageddon`.
 
 
-    
+The command-line interface
+===========================
+
+
+.. code-block:: bash
+
+    $ r-lint --help
+    ______     __         __     __   __     ______  
+   /\  == \   /\ \       /\ \   /\ "-.\ \   /\__  _\ 
+   \ \  __<   \ \ \____  \ \ \  \ \ \-.  \  \/_/\ \/ 
+    \ \_\ \_\  \ \_____\  \ \_\  \ \_\ "\_\    \ \_\ 
+     \/_/ /_/   \/_____/   \/_/   \/_/ \/_/     \/_/ 
+                                                  
+    2018, QBiC software, Sven Fillinger
+    sven.fillinger@qbic.uni-tuebingen.de
+        
+    Usage: r-lint [OPTIONS] COMMAND [ARGS]...
+
+    Options:
+    --version      Show the version and exit.
+    -v, --verbose  Verbose output (print debug statements)
+    --help         Show this message and exit.
+
+    Commands:
+    build  Resolve R packages resources from Anaconda...
+    lint   Check R project against linting guidelines
+
 
 
