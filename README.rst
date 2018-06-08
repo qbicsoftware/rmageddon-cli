@@ -22,19 +22,19 @@ Motivation
 
     All containers there passed the linting and have been build with `Rmageddon`.
 
-.. contents:: Table of Contents
+.. contents:: **Table of Contents**
 
 
 Installation
 ============
 
-The easiest way is to install a stable release of `r-lint` from PyPi_ with pip_:
+The easiest way is to install a stable release of ``r-lint`` from PyPi_ with pip_:
 
 .. code-block:: bash
 
     $ pip install r-lint
 
-Or if you want the latest development version, you can install from the `master` branch on GitHub with:
+Or if you want the latest development version, you can install from the ``master`` branch on GitHub with:
 
 .. code-block:: bash
 
@@ -47,7 +47,7 @@ Or if you want the latest development version, you can install from the `master`
 The command-line interface
 ===========================
 
-Once you have installed *r-lint*, just call it with the `--help` option to get an overview of the subcommands
+Once you have installed *r-lint*, just call it with the ``--help`` option to get an overview of the subcommands
 available in *r-lint*:
 
 .. code-block:: bash
@@ -74,9 +74,31 @@ available in *r-lint*:
     lint   Check R project against linting guidelines
 
 
-If you want to know the positional arguments and options of each subcommand, just type `r-lint build --help` or 
-`r-lint lint --help`.
+If you want to know the positional arguments and options of each subcommand, just type ``r-lint build --help`` or 
+``r-lint lint --help``.
 
-The subcommand build
---------------------
 
+The subcommand <lint>
+---------------------
+
+The subcommand <lint> is actually checking an R container project against some specified rule-set which are, which lead to 
+a lint failure, if not present:
+
+    - A file named ``Dockerfile``, the receipe for the Docker container 
+    - A file named ``environment.yml``, the **Conda configuration file**
+
+There a warnings raised, if not present:
+
+    - A folder named ``data``, with the input data for the R analysis
+    - A folder named ``scripts``, with the R scripts themselves
+
+Dockerfile 
+    For the ``Dockerfile`` some tags are mandator:
+        - Name tag
+
+
+
+The subcommand <build>
+----------------------
+
+TODO: describe.
