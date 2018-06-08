@@ -81,21 +81,47 @@ If you want to know the positional arguments and options of each subcommand, jus
 The subcommand <lint>
 ---------------------
 
-The subcommand <lint> is actually checking an R container project against some specified rule-set which are, which lead to 
-a lint failure, if not present:
+The subcommand <lint> is actually checking an R container project against some specified rule-set. Currently, *r-lint* is assuming the following project structure:
 
-    - A file named ``Dockerfile``, the receipe for the Docker container 
-    - A file named ``environment.yml``, the **Conda configuration file**
+.. code-block: bash
 
-There a warnings raised, if not present:
+    .
+    ├── data
+    │   └── input_data   // A collection of input data
+    |   └── ...
+    ├── Dockerfile       // Docker container recipe
+    ├── environment.yml  // Conda environment recipe
+    └── scripts
+        └── example.R    // A collection of R scripts
+        └── ...
 
-    - A folder named ``data``, with the input data for the R analysis
-    - A folder named ``scripts``, with the R scripts themselves
+Start the linting of a project directoy with:
+
+.. code-block: bash
+
+    $ r-lint lint /path/to/project
+ 
+The linting will report warnings and failures by default. Failure events are recorded, if you did not provide:
+
+- A file named ``Dockerfile``, the receipe for the Docker container 
+- A file named ``environment.yml``, the **Conda configuration file**
+
+There a warnings raised, if you did not provide:
+
+- A folder named ``data``, with the input data for the R analysis
+- A folder named ``scripts``, with the R scripts themselves
 
 Dockerfile 
-    For the ``Dockerfile`` some tags are mandator:
-        - Name tag
+    For the ``Dockerfile`` some things are mandatory, like:
+        
+    - ``LABEL name`` - The name of the container. Needs to match the regex ``(Q|q)[a-zA-Z0-9]{4}-ranalysis``, for example **qtest-ranalysis**
+    - ``LABEL maintainer`` - The name of the container maintainer with email, for example **Sven Fillinger <sven.fillinger@qbic.uni-tuebingen.de>**
+    - ``LABEL version`` - The 3-digit numeric version string following the `semantic version standard`__
+    - ``LABEL organization`` - The organization's name
+    - ``LABEL github`` - The link to the GitHub repository
 
+__ semantic_
+.. _semantic: https://semver.org/
 
 
 The subcommand <build>
