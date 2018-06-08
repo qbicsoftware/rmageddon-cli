@@ -20,7 +20,7 @@ Motivation
 
     The container collection is hosted on a different GitHub repository: https://github.com/qbicsoftware/r-container-lib.
 
-    All containers there have past the linting and have been build with `Rmageddon`.
+    All containers there passed the linting and have been build with `Rmageddon`.
 
 
     
