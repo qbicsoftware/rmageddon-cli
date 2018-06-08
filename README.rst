@@ -22,10 +22,33 @@ Motivation
 
     All containers there passed the linting and have been build with `Rmageddon`.
 
+.. contents:: Table of Contents
+
+
+Installation
+============
+
+The easiest way is to install a stable release of `r-lint` from PyPi_ with pip_:
+
+.. code-block:: bash
+
+    $ pip install r-lint
+
+Or if you want the latest development version, you can install from the `master` branch on GitHub with:
+
+.. code-block:: bash
+
+    $ pip install git+https://github.com/qbicsoftware/r-lint-cli
+
+.. _PyPi: https://pypi.org/
+.. _pip: https://pypi.org/project/pip/
+
 
 The command-line interface
 ===========================
 
+Once you have installed *r-lint*, just call it with the `--help` option to get an overview of the subcommands
+available in *r-lint*:
 
 .. code-block:: bash
 
@@ -51,4 +74,9 @@ The command-line interface
     lint   Check R project against linting guidelines
 
 
+If you want to know the positional arguments and options of each subcommand, just type `r-lint build --help` or 
+`r-lint lint --help`.
+
+The subcommand build
+--------------------
 
