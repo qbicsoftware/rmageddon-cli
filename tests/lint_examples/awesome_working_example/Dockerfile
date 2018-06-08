@@ -5,7 +5,7 @@ LABEL authors="{{ cookiecutter.author_name }}"
 LABEL organization="Quantitative Biology Center"
 LABEL description="{{ cookiecutter.description }}"
 LABEL maintainer="{{ cookiecutter.author_name }}" < "{{ cookiecutter.author_email }}">  
-LABEL version="{{ cookiecutter.container_version }}"
+LABEL version="1.0.0"
 LABEL github="https://github.com/qbicsoftware"
 
 # Install procps so that Nextflow can poll CPU usage

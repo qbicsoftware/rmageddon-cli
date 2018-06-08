@@ -142,6 +142,30 @@ class RContainerLint(object):
             if not any(label == x for x in labels.keys()):
                 self.failed.append((2, 'You havent\'t set LABEL \'{}\' in the Dockerfile.'.format(label)))
                 return
+        
+        # 3. Check if labels are empty
+        for mand_label in expected_labels:
+            if not labels[mand_label]:
+                self.failed.append((2, "You did not provide content for label \'{}\' "
+                    "for your container.".format(mand_label)))
+                return
+        
+        # 4. Check name matches regex
+        name = r"(Q|q)[a-zA-Z0-9]{4}-ranalysis"
+        match = re.search(name, labels["name"])
+        if not match:
+            self.failed.append((2, "The container name was invalid. Make sure it "
+                "matches the specification! Name was: {}".format(labels["name"])))
+            return
+
+        # 5. Check version matches regex
+        sem_version = r"[0-9]*\.[0-9]*\.[0-9]*"
+        match = re.search(sem_version, labels["version"])
+        if not match:
+            self.failed.append((2, "The version of the container was malformatted."
+                " Be sure that you use semantic versioning <major>.<minor>.<patch> (https://semver.org/)"))
+            return
+
         self.passed.append((2, 'All labels set correctly in the Dockerfile'))
         
 
