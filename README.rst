@@ -83,7 +83,7 @@ The subcommand <lint>
 
 The subcommand <lint> is actually checking an R container project against some specified rule-set. Currently, *r-lint* is assuming the following project structure:
 
-.. code-block: bash
+.. code-block:: bash
 
     .
     ├── data
@@ -97,16 +97,16 @@ The subcommand <lint> is actually checking an R container project against some s
 
 Start the linting of a project directoy with:
 
-.. code-block: bash
+.. code-block:: bash
 
     $ r-lint lint /path/to/project
  
-The linting will report warnings and failures by default. Failure events are recorded, if you did not provide:
+The linting will report warnings and failures by default. **Failure** events are recorded, if you did not provide:
 
 - A file named ``Dockerfile``, the receipe for the Docker container 
 - A file named ``environment.yml``, the **Conda configuration file**
 
-There a warnings raised, if you did not provide:
+There a **warnings** raised, if you did not provide:
 
 - A folder named ``data``, with the input data for the R analysis
 - A folder named ``scripts``, with the R scripts themselves
@@ -127,4 +127,23 @@ __ semantic_
 The subcommand <build>
 ----------------------
 
-TODO: describe.
+The subcommand ``build`` is a small helper tool, that is able to parse ``sessionInfo`` output from R and extracts the package names with versions.
+
+It then takes these and checks on `Anaconda cloud`__ if these are available in one of the pre-defined channels `[default, r, bioconda]`. If successful, it will automatically add the corresponding conda package with version in the `environment.yml`. If a package cannot be found, a warning is printed on the command-line. If a specified version of a package is not found, it prints the available versions on the command-line.
+
+To start the build, be sure you have an active internet connection and run it with:
+
+.. code-block:: bash
+    
+    $ r-lint build <R package list> environment.yml
+
+The ``R package list`` can be obtained from inside your active R session, that was used to run your R analysis successfully. From within your R console, just type:
+
+.. code-block:: R
+
+    > sessionInfo()$otherPkgs
+    
+This is your R package list, which is needed for r-lint build to work properly.
+
+__ anaconda_
+.. _anaconda: https://anaconda.org/
