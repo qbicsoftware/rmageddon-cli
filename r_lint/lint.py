@@ -151,7 +151,7 @@ class RContainerLint(object):
                 return
         
         # 4. Check name matches regex
-        name = r"(Q|q)[a-zA-Z0-9]{4}-ranalysis"
+        name = r"(Q|q)[a-zA-Z0-9]{4}000_[a-zA-Z0-9]{15}_ranalysis"
         match = re.search(name, labels["name"])
         if not match:
             self.failed.append((2, "The container name was invalid. Make sure it "
