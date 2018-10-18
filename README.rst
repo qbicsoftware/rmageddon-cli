@@ -5,8 +5,8 @@ Rmageddon
 .. image:: https://travis-ci.org/qbicsoftware/r-lint-cli.svg?branch=master
     :target: https://travis-ci.org/qbicsoftware/r-lint-cli
 
-.. image:: https://codecov.io/gh/qbicsoftware/qbic-r-lint/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/qbicsoftware/qbic-r-lint
+.. image:: https://codecov.io/gh/qbicsoftware/r-lint-cli/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/qbicsoftware/r-lint-cli
 
 A small linting and building command line tool for reproducible R analysis with Docker at QBiC.
 
