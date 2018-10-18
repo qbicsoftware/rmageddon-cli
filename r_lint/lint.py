@@ -202,7 +202,7 @@ class RContainerLint(object):
         
         # Check the name regex
         # <projectcode>-ranalysis
-        env_name = r"(Q|q)[a-zA-Z0-9]{4}-ranalysis"
+        env_name = "(Q|q)[a-zA-Z0-9]{4}000_[a-zA-Z0-9]{1,15}_ranalysis"
         match = re.search(env_name, self.conda_config.get('name'))
         if not match:
             self.failed.append((3, "The conda environment name was not set properly. \
