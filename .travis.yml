@@ -8,10 +8,14 @@ python:
 
 install:
   - cd ${TRAVIS_BUILD_DIR}
+  - pip install --upgrade pip
   - pip install .
-  - pip install codecov pytest pytest-cov
+  - pip install codecov pytest pytest-cov cookiecutter
 
-script: python -m pytest --cov=r_lint .
+script:
+  - python -m pytest --cov=r_lint .
+  - cookiecutter --no-input https://github.com/qbicsoftware/r-container-template
+  - r-lint lint .
 
 after_success:
   - codecov
