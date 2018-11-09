@@ -1,22 +1,29 @@
 sudo: required
 language: python
 python:
-    - "2.7"
-    - "3.4"
-    - "3.5"
-    - "3.6"
-
+ - '2.7'
+ - '3.4'
+ - '3.5'
+ - '3.6'
 install:
-  - cd ${TRAVIS_BUILD_DIR}
-  - pip install --upgrade pip
-  - pip install .
-  - pip install codecov pytest pytest-cov cookiecutter
-
+ - cd ${TRAVIS_BUILD_DIR}
+ - pip install --upgrade pip
+ - pip install .
+ - pip install codecov pytest pytest-cov cookiecutter
 script:
-  - python -m pytest --cov=r_lint .
-  - cookiecutter --no-input https://github.com/qbicsoftware/r-container-template
-  - cd QABCD
-  - r-lint lint .
-
+ - python -m pytest --cov=r_lint .
+ - cookiecutter --no-input https://github.com/qbicsoftware/r-container-template
+ - cd QABCD
+ - r-lint lint .
 after_success:
-  - codecov
+ - codecov
+deploy:
+  provider: pypi
+  user: "sven1103"
+  password:
+    secure: "ZKz/rS5lB2pmUtXrc9QGL6TDxFLiDua6DZauW1kP0lFmPMqKiDmroVSj+8NK5MgQZBYT77f/ZPoVhSTyASsqRxjK4tIlgNcT4AXg8m3yiGm7hYD4XMGRzTx0Gm+heM4Is4FMqaK+WA9bVoP6ntIzA/rEXSgrc2l5rTAyS9t6M5Pb1XoOrv0brHICIwtKTfEjDHAagclyIBACYLdTl07tPgiuMWAdrMlln/Czyjz1cT7eCiIFDZWPb+/Mz8u4ml55G6yt0e1EgMHUusGaVi3hAFVe7vXd2xzA98jtiKXv0n2Y4QJeWeRwfwU9ChIUZV3H9u6ne4BrgYNcdBT96pCBRSnKoDOKryIXRueIAOha7OfIMI78uWcDMZidlEH6f8NkM+De2X4g+B3uqVUx5j+/ei7dlUzAPuBYosigZvSsRySK51SM31td4sOt0/Uxzx6gHPP72tOT9IJXWu5pPOXfJ88IWebrbYloWIy0bTcZqPJuhXdoBycWBZq7bPWe9c0m5wATSzTbSVQrYQ3WY+FpKqoMgQ1EK1YvHWpnKpMZLxTqt3HSS1IxmGffj6m9JOowaFUz/YkCA056CaYa6LLAbBAmxJCQFU7nE+KEXfsrI5qIkYpA1KOxVaPGvVu/42xxlrt938MoiCGGGeVMdGA3JRMznlf1TnImDJp+4Eoz1AE="
+  on:
+    tags: true
+    distributions: sdist bdist_wheel
+    repo: qbicsoftware/r-lint-cli
+    python: '3.6'
