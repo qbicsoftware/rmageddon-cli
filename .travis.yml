@@ -15,6 +15,7 @@ script:
  - cookiecutter --no-input https://github.com/qbicsoftware/r-container-template
  - cd QABCD
  - r-lint lint .
+ - cd ${TRAVIS_BUILD_DIR}
 after_success:
  - codecov
 deploy:
