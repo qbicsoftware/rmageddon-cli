@@ -14,7 +14,6 @@ The easiest way is to install a stable release of ``rmageddon`` from PyPi_ with 
 ```
 
 
-
 Or if you want the latest development version, you can install from the ``master`` branch on GitHub with:
 
 ```bash
@@ -110,7 +109,7 @@ The subcommand <build>
 
 The subcommand ``build`` is a small helper tool, that is able to parse ``sessionInfo`` output from R and extracts the package names with versions.
 
-It then takes these and checks on `Anaconda cloud`__ if these are available in one of the pre-defined channels `[default, r, bioconda]`. If successful, it will automatically add the corresponding conda package with version in the `environment.yml`. If a package cannot be found, a warning is printed on the command-line. If a specified version of a package is not found, it prints the available versions on the command-line.
+It then takes these and checks on [Anaconda Cloud](https://anaconda.org/) if these are available in one of the pre-defined channels `[default, r, bioconda]`. If successful, it will automatically add the corresponding conda package with version in the `environment.yml`. If a package cannot be found, a warning is printed on the command-line. If a specified version of a package is not found, it prints the available versions on the command-line.
 
 To start the build, be sure you have an active internet connection and run it with:
 
