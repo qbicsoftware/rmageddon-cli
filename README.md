@@ -26,7 +26,7 @@ This README will guide you through the complete process of starting with the ses
 1. Create a sessioninfo from your R-analysis. The official R-documentation explains this process well: [Sessioninfo](https://www.rdocumentation.org/packages/utils/versions/3.5.2/topics/sessionInfo).
 2. Install Rmageddon. This is explained in the documentation for Rmageddon: [Rmageddon documentation](doc/Rmageddon.md)
 3. Run Rmageddon build on your sessioninfo. This is again explained in the documentation for Rmageddon: [Rmageddon documentation](doc/Rmageddon.md), especially in the build subcommand section.
-4. Create a docker environment using the cookiecutter template. This process is described in the documentation for the Rmageddon-cookiecutter [Rmageddon-cookiecutter documentation](doc/Rmageddon-cookiecutter.md)
+4. Create a docker environment using the cookiecutter template. This process is described in the documentation for the [Rmageddon-cookiecutter](doc/Rmageddon-cookiecutter.md)
 5. Copy the generated environment.yml content into the environment.yml of your just created R-container 
 6. Add your R-scripts that you used for your analysis to your just created R-container 
 7. Validate your just created R-container: Run Rmageddon lint on it. Please refer to the documentation for Rmageddon: [Rmageddon documentation](doc/Rmageddon.md), especially in the lint subcommand section.
