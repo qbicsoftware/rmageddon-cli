@@ -16,134 +16,23 @@ Motivation
 
     In order to face this issue, under the umbrella of better reproducibility of computational results, we created
     `Rmageddon`, a small command-line tool, that assists in the build of Docker container with specified version of R and
-    a dedicated, version-defined package installation. 
+    a dedicated, version-defined package installation. Moreover, Rmageddon provides cookiecutter templates for the easy creation of docker environments for your R analysis.
 
-    The container collection is hosted on a different GitHub repository: https://github.com/qbicsoftware/r-container-lib.
-
-    All containers there passed the linting and have been build with `Rmageddon`.
-
-.. contents:: **Table of Contents**
-
-
-Installation
-============
-
-The easiest way is to install a stable release of ``r-lint`` from PyPi_ with pip_:
-
-.. code-block:: bash
-
-    $ pip install r-lint
-
-Or if you want the latest development version, you can install from the ``master`` branch on GitHub with:
-
-.. code-block:: bash
-
-    $ pip install git+https://github.com/qbicsoftware/r-lint-cli
-
-.. _PyPi: https://pypi.org/
-.. _pip: https://pypi.org/project/pip/
-
-
-The command-line interface
-===========================
-
-Once you have installed *r-lint*, just call it with the ``--help`` option to get an overview of the subcommands
-available in *r-lint*:
-
-.. code-block:: bash
-
-    $ r-lint --help
-    ______     __         __     __   __     ______  
-   /\  == \   /\ \       /\ \   /\ "-.\ \   /\__  _\ 
-   \ \  __<   \ \ \____  \ \ \  \ \ \-.  \  \/_/\ \/ 
-    \ \_\ \_\  \ \_____\  \ \_\  \ \_\ "\_\    \ \_\ 
-     \/_/ /_/   \/_____/   \/_/   \/_/ \/_/     \/_/ 
-                                                  
-    2018, QBiC software, Sven Fillinger
-    sven.fillinger@qbic.uni-tuebingen.de
-        
-    Usage: r-lint [OPTIONS] COMMAND [ARGS]...
-
-    Options:
-    --version      Show the version and exit.
-    -v, --verbose  Verbose output (print debug statements)
-    --help         Show this message and exit.
-
-    Commands:
-    build  Resolve R packages resources from Anaconda...
-    lint   Check R project against linting guidelines
-
-
-If you want to know the positional arguments and options of each subcommand, just type ``r-lint build --help`` or 
-``r-lint lint --help``.
-
-
-The subcommand <lint>
----------------------
-
-The subcommand <lint> is actually checking an R container project against some specified rule-set. Currently, *r-lint* is assuming the following project structure:
-
-.. code-block:: bash
-
-    .
-    ├── data
-    │   └── input_data   // A collection of input data
-    |   └── ...
-    ├── Dockerfile       // Docker container recipe
-    ├── environment.yml  // Conda environment recipe
-    └── scripts
-        └── example.R    // A collection of R scripts
-        └── ...
-
-Start the linting of a project directoy with:
-
-.. code-block:: bash
-
-    $ r-lint lint /path/to/project
- 
-The linting will report warnings and failures by default. **Failure** events are recorded, if you did not provide:
-
-- A file named ``Dockerfile``, the receipe for the Docker container 
-- A file named ``environment.yml``, the **Conda configuration file**
-
-There a **warnings** raised, if you did not provide:
-
-- A folder named ``data``, with the input data for the R analysis
-- A folder named ``scripts``, with the R scripts themselves
-
-Dockerfile 
-    For the ``Dockerfile`` some things are mandatory, like:
-        
-    - ``LABEL name`` - The name of the container. Needs to match the regex ``(Q|q)[a-zA-Z0-9]{4}-ranalysis``, for example **qtest-ranalysis**
-    - ``LABEL maintainer`` - The name of the container maintainer with email, for example **Sven Fillinger <sven.fillinger@qbic.uni-tuebingen.de>**
-    - ``LABEL version`` - The 3-digit numeric version string following the `semantic version standard`__
-    - ``LABEL organization`` - The organization's name
-    - ``LABEL github`` - The link to the GitHub repository
-
-__ semantic_
-.. _semantic: https://semver.org/
-
-
-The subcommand <build>
-----------------------
-
-The subcommand ``build`` is a small helper tool, that is able to parse ``sessionInfo`` output from R and extracts the package names with versions.
-
-It then takes these and checks on `Anaconda cloud`__ if these are available in one of the pre-defined channels `[default, r, bioconda]`. If successful, it will automatically add the corresponding conda package with version in the `environment.yml`. If a package cannot be found, a warning is printed on the command-line. If a specified version of a package is not found, it prints the available versions on the command-line.
-
-To start the build, be sure you have an active internet connection and run it with:
-
-.. code-block:: bash
+    The container collection is hosted on a different GitHub repository: [r-container-lib](https://github.com/qbicsoftware/r-container-lib) .All containers there passed the linting and have been build with `Rmageddon`.
     
-    $ r-lint build <R package list> environment.yml
-
-The ``R package list`` can be obtained from inside your active R session, that was used to run your R analysis successfully. From within your R console, just type:
-
-.. code-block:: R
-
-    > sessionInfo()$otherPkgs
+    The complete workflow for the creation of a new container for your R-analysis is depicted in the following image: 
     
-This is your R package list, which is needed for r-lint build to work properly.
+![rmageddon_workflow](https://user-images.githubusercontent.com/21954664/53096328-2acf5580-351f-11e9-898a-1b8ce790afee.png)
 
-__ anaconda_
-.. _anaconda: https://anaconda.org/
+This README will guide you through the complete process starting with the sessioninfo of your R-analysis and finally sharing your docker powered R-environment on our [r-container-lib](https://github.com/qbicsoftware/r-container-lib).
+
+1. Create a sessioninfo from your R-analysis. The official R-documentation explains this process well: [Sessioninfo](https://www.rdocumentation.org/packages/utils/versions/3.5.2/topics/sessionInfo).
+2. Install Rmageddon. This is explained in the documentation for Rmageddon: [Rmageddon documentation](doc/r-lint.md)
+3. Run Rmageddon build on your sessioninfo. This is again explained in the documentation for Rmageddon: [r-lint documentation](doc/r-lint.md), especially in the build subcommand section.
+4. Create a docker environment using the cookiecutter template. This process is described in the documentation for the Rmageddon-cookiecutter [Rmageddon-cookiecutter documentation](doc/r-container-template.md)
+5. Copy the generated environment.yml content into the environment.yml of your just created R-container 
+6. Add your R-scripts that you used for your analysis to your just created R-container 
+7. Validate your just created R-container: Run Rmageddon lint on it. Please refer to the documentation for Rmageddon: [Rmageddon documentation](doc/r-lint.md), especially in lint subcommand section.
+8. If validation was successful your R-container is now ready to be added to our R-container library. Please refer to the final documentation of the [R-container-lib](https://github.com/qbicsoftware/r-container-lib).
+9. Enjoy!
+
