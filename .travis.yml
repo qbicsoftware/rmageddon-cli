@@ -13,10 +13,10 @@ install:
  - pip install .
  - pip install codecov pytest pytest-cov cookiecutter
 script:
- - python -m pytest --cov=r_lint .
+ - python -m pytest --cov=rmageddon .
  - cookiecutter --no-input .
  - cd QABCD
- - r-lint lint .
+ - rmageddon lint .
  - cd ${TRAVIS_BUILD_DIR}
 after_success:
  - codecov
@@ -28,5 +28,5 @@ deploy:
   on:
     tags: true
     distributions: sdist bdist_wheel
-    repo: qbicsoftware/r-lint-cli
+    repo: qbicsoftware/rmageddon-cli
     python: '3.6'

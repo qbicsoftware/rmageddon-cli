@@ -1,8 +1,5 @@
 # QBiC R analysis template
 
-[![Build Status](https://travis-ci.org/qbicsoftware/r-container-template.svg?branch=master)](https://travis-ci.org/qbicsoftware/r-container-template)
-
-
 This repo holds a [cookiecutter](https://github.com/audreyr/cookiecutter) template for reproducible analysis with R at QBiC.
 
 ## Template using cookiecutter
@@ -12,10 +9,10 @@ You can easily create an R container from the template with [cookiecutter](https
 ```
 $ pip install cookiecutter
 ```
-In order to create a project from the `r-container-template`, just type:
+In order to create a project from the `rmageddon-cookiecutter`, just type:
 
 ```
-$ cookiecutter https://github.com/qbicsoftware/r-container-template/
+$ cookiecutter https://github.com/qbicsoftware/rmageddon-cli
 r_version [3.2.4]: 
 author_name [Sven Fillinger]: 
 author_email [sven.fillinger@qbic.uni-tuebingen.de]: 

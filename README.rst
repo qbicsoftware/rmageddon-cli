@@ -31,7 +31,7 @@ This README will guide you through the complete process of starting with the ses
 4. Create a docker environment using the cookiecutter template. This process is described in the documentation for the Rmageddon-cookiecutter [Rmageddon-cookiecutter documentation](doc/Rmageddon-cookiecutter.md)
 5. Copy the generated environment.yml content into the environment.yml of your just created R-container 
 6. Add your R-scripts that you used for your analysis to your just created R-container 
-7. Validate your just created R-container: Run Rmageddon lint on it. Please refer to the documentation for Rmageddon: [Rmageddon documentation](doc/Rmageddon.md), especially in lint subcommand section.
+7. Validate your just created R-container: Run Rmageddon lint on it. Please refer to the documentation for Rmageddon: [Rmageddon documentation](doc/Rmageddon.md), especially in the lint subcommand section.
 8. If validation was successful your R-container is now ready to be added to our R-container library. Please refer to the final documentation of the [R-container-lib](https://github.com/qbicsoftware/r-container-lib).
 9. Enjoy!
 

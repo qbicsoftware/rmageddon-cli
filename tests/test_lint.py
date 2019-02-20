@@ -16,7 +16,7 @@ import sys
 
 import unittest
 from ruamel.yaml import YAML
-import r_lint.lint as lint
+import rmageddon.lint as lint
 
 def listfiles(path):
     files_found = []
