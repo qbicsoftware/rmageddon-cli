@@ -5,7 +5,7 @@ import sys
 import unittest
 
 from ruamel.yaml import YAML
-import r_lint.builder as builder
+import rmageddon.builder as builder
 
 def pf(wd, path):
     return os.path.join(wd, path)
@@ -19,7 +19,7 @@ PATH_GOOD_R_PKS = pf(WD, "builder_examples/good_r_packages")
 PATH_EMPTY_R_PKS = pf(WD, "builder_examples/empty_r_packages")
 
 class TestBuilder(unittest.TestCase):
-    """ Test class for the r_lint/builder.py code """
+    """ Test class for the rmageddon/builder.py code """
 
     def assess_lint_status(self, lint_obj, **expected):
         """Little helper function for assessing the lint

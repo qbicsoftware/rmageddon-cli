@@ -1,0 +1,9 @@
+{
+    "r_version": "3.2.4",
+    "author_name": "Sven Fillinger",
+    "author_email": "sven.fillinger@qbic.uni-tuebingen.de",
+    "container_version": "0.1.0",
+    "project_code": "QABCD",
+    "project_label": "basic",
+    "description": "Put a short analyses description here"
+}

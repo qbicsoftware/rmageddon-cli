@@ -1,20 +1,22 @@
 sudo: required
 language: python
+dist: xenial
 python:
  - '2.7'
  - '3.4'
  - '3.5'
  - '3.6'
+ - '3.7'
 install:
  - cd ${TRAVIS_BUILD_DIR}
  - pip install --upgrade pip
  - pip install .
  - pip install codecov pytest pytest-cov cookiecutter
 script:
- - python -m pytest --cov=r_lint .
- - cookiecutter --no-input https://github.com/qbicsoftware/r-container-template
+ - python -m pytest --cov=rmageddon .
+ - cookiecutter --no-input .
  - cd QABCD
- - r-lint lint .
+ - rmageddon lint .
  - cd ${TRAVIS_BUILD_DIR}
 after_success:
  - codecov
@@ -26,5 +28,5 @@ deploy:
   on:
     tags: true
     distributions: sdist bdist_wheel
-    repo: qbicsoftware/r-lint-cli
+    repo: qbicsoftware/rmageddon-cli
     python: '3.6'
