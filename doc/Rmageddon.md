@@ -1,26 +1,6 @@
-
 Rmageddon
 ##############
-
-.. image:: https://travis-ci.org/qbicsoftware/r-lint-cli.svg?branch=master
-    :target: https://travis-ci.org/qbicsoftware/r-lint-cli
-
-.. image:: https://codecov.io/gh/qbicsoftware/r-lint-cli/branch/master/graph/badge.svg
-  :target: https://codecov.io/gh/qbicsoftware/r-lint-cli
-
-A small linting and building command line tool for reproducible R analysis with Docker at QBiC.
-
-Motivation
-    Performing a reproducible analysis with R and share the environment status of an R installation with the 
-    necessary packages and all that with the correct version is a very challenging task.
-
-    In order to face this issue, under the umbrella of better reproducibility of computational results, we created
-    `Rmageddon`, a small command-line tool, that assists in the build of Docker container with specified version of R and
-    a dedicated, version-defined package installation. 
-
-    The container collection is hosted on a different GitHub repository: https://github.com/qbicsoftware/r-container-lib.
-
-    All containers there passed the linting and have been build with `Rmageddon`.
+This is the main documentation for the Rmageddon core functionality: building and linting. The documentation for Rmageddons cookiecutter can be found here: [Rmageddon-cookiecutter](Rmageddon-cookiecutter)
 
 .. contents:: **Table of Contents**
 
@@ -28,17 +8,17 @@ Motivation
 Installation
 ============
 
-The easiest way is to install a stable release of ``r-lint`` from PyPi_ with pip_:
+The easiest way is to install a stable release of ``rmageddon`` from PyPi_ with pip_:
 
 .. code-block:: bash
 
-    $ pip install r-lint
+    $ pip install rmageddon
 
 Or if you want the latest development version, you can install from the ``master`` branch on GitHub with:
 
 .. code-block:: bash
 
-    $ pip install git+https://github.com/qbicsoftware/r-lint-cli
+    $ pip install git+https://github.com/qbicsoftware/rmageddon-cli
 
 .. _PyPi: https://pypi.org/
 .. _pip: https://pypi.org/project/pip/
@@ -47,22 +27,26 @@ Or if you want the latest development version, you can install from the ``master
 The command-line interface
 ===========================
 
-Once you have installed *r-lint*, just call it with the ``--help`` option to get an overview of the subcommands
-available in *r-lint*:
+Once you have installed *rmageddon*, just call it with the ``--help`` option to get an overview of the subcommands
+available in *rmageddon*:
 
 .. code-block:: bash
 
-    $ r-lint --help
-    ______     __         __     __   __     ______  
-   /\  == \   /\ \       /\ \   /\ "-.\ \   /\__  _\ 
-   \ \  __<   \ \ \____  \ \ \  \ \ \-.  \  \/_/\ \/ 
-    \ \_\ \_\  \ \_____\  \ \_\  \ \_\ "\_\    \ \_\ 
-     \/_/ /_/   \/_____/   \/_/   \/_/ \/_/     \/_/ 
+    $ rmageddon --help
+ _______  _______  _______  _______  _______  ______   ______   _______  _       
+(  ____ )(       )(  ___  )(  ____ \(  ____ \(  __  \ (  __  \ (  ___  )( (    /|
+| (    )|| () () || (   ) || (    \/| (    \/| (  \  )| (  \  )| (   ) ||  \  ( |
+| (____)|| || || || (___) || |      | (__    | |   ) || |   ) || |   | ||   \ | |
+|     __)| |(_)| ||  ___  || | ____ |  __)   | |   | || |   | || |   | || (\ \) |
+| (\ (   | |   | || (   ) || | \_  )| (      | |   ) || |   ) || |   | || | \   |
+| ) \ \__| )   ( || )   ( || (___) || (____/\| (__/  )| (__/  )| (___) || )  \  |
+|/   \__/|/     \||/     \|(_______)(_______/(______/ (______/ (_______)|/    )_)
+                                                                                 
                                                   
     2018, QBiC software, Sven Fillinger
     sven.fillinger@qbic.uni-tuebingen.de
         
-    Usage: r-lint [OPTIONS] COMMAND [ARGS]...
+    Usage: rmageddon [OPTIONS] COMMAND [ARGS]...
 
     Options:
     --version      Show the version and exit.
@@ -74,14 +58,14 @@ available in *r-lint*:
     lint   Check R project against linting guidelines
 
 
-If you want to know the positional arguments and options of each subcommand, just type ``r-lint build --help`` or 
-``r-lint lint --help``.
+If you want to know the positional arguments and options of each subcommand, just type ``rmageddon build --help`` or 
+``rmageddon lint --help``.
 
 
 The subcommand <lint>
 ---------------------
 
-The subcommand <lint> is actually checking an R container project against some specified rule-set. Currently, *r-lint* is assuming the following project structure:
+The subcommand <lint> is actually checking an R container project against some specified rule-set. Currently, *rmageddon* is assuming the following project structure:
 
 .. code-block:: bash
 
@@ -99,7 +83,7 @@ Start the linting of a project directoy with:
 
 .. code-block:: bash
 
-    $ r-lint lint /path/to/project
+    $ rmageddon lint /path/to/project
  
 The linting will report warnings and failures by default. **Failure** events are recorded, if you did not provide:
 
@@ -135,7 +119,7 @@ To start the build, be sure you have an active internet connection and run it wi
 
 .. code-block:: bash
     
-    $ r-lint build <R package list> environment.yml
+    $ rmageddon build <R package list> environment.yml
 
 The ``R package list`` can be obtained from inside your active R session, that was used to run your R analysis successfully. From within your R console, just type:
 
@@ -143,7 +127,7 @@ The ``R package list`` can be obtained from inside your active R session, that w
 
     > sessionInfo()$otherPkgs
     
-This is your R package list, which is needed for r-lint build to work properly.
+This is your R package list, which is needed for rmageddon build to work properly.
 
 __ anaconda_
 .. _anaconda: https://anaconda.org/
