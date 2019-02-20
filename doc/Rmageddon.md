@@ -1,8 +1,6 @@
-Rmageddon
-##############
-This is the main documentation for the Rmageddon core functionality: building and linting. The documentation for Rmageddons cookiecutter can be found here: [Rmageddon-cookiecutter](Rmageddon-cookiecutter)
+# Rmageddon
 
-.. contents:: **Table of Contents**
+This is the main documentation for the Rmageddon core functionality: building and linting. The documentation for Rmageddons cookiecutter can be found here: [Rmageddon-cookiecutter](Rmageddon-cookiecutter)
 
 
 Installation
@@ -10,27 +8,27 @@ Installation
 
 The easiest way is to install a stable release of ``rmageddon`` from PyPi_ with pip_:
 
-.. code-block:: bash
 
+```bash 
     $ pip install rmageddon
+```
+
+
 
 Or if you want the latest development version, you can install from the ``master`` branch on GitHub with:
 
-.. code-block:: bash
-
+```bash
     $ pip install git+https://github.com/qbicsoftware/rmageddon-cli
-
-.. _PyPi: https://pypi.org/
-.. _pip: https://pypi.org/project/pip/
+```
 
 
 The command-line interface
 ===========================
 
-Once you have installed *rmageddon*, just call it with the ``--help`` option to get an overview of the subcommands
-available in *rmageddon*:
+Once you have installed rmageddon, just call it with the ``--help`` option to get an overview of the subcommands
+available in rmageddon:
 
-.. code-block:: bash
+```bash
 
     $ rmageddon --help
  _______  _______  _______  _______  _______  ______   ______   _______  _       
@@ -56,6 +54,7 @@ available in *rmageddon*:
     Commands:
     build  Resolve R packages resources from Anaconda...
     lint   Check R project against linting guidelines
+```
 
 
 If you want to know the positional arguments and options of each subcommand, just type ``rmageddon build --help`` or 
@@ -66,8 +65,7 @@ The subcommand <lint>
 ---------------------
 
 The subcommand <lint> is actually checking an R container project against some specified rule-set. Currently, *rmageddon* is assuming the following project structure:
-
-.. code-block:: bash
+```bash
 
     .
     ├── data
@@ -78,12 +76,14 @@ The subcommand <lint> is actually checking an R container project against some s
     └── scripts
         └── example.R    // A collection of R scripts
         └── ...
+```
 
 Start the linting of a project directoy with:
 
-.. code-block:: bash
+```bash
 
     $ rmageddon lint /path/to/project
+```
  
 The linting will report warnings and failures by default. **Failure** events are recorded, if you did not provide:
 
@@ -104,9 +104,6 @@ Dockerfile
     - ``LABEL organization`` - The organization's name
     - ``LABEL github`` - The link to the GitHub repository
 
-__ semantic_
-.. _semantic: https://semver.org/
-
 
 The subcommand <build>
 ----------------------
@@ -117,17 +114,16 @@ It then takes these and checks on `Anaconda cloud`__ if these are available in o
 
 To start the build, be sure you have an active internet connection and run it with:
 
-.. code-block:: bash
-    
+```bash 
     $ rmageddon build <R package list> environment.yml
+```
 
 The ``R package list`` can be obtained from inside your active R session, that was used to run your R analysis successfully. From within your R console, just type:
 
-.. code-block:: R
+```R
 
     > sessionInfo()$otherPkgs
-    
+```
 This is your R package list, which is needed for rmageddon build to work properly.
 
-__ anaconda_
-.. _anaconda: https://anaconda.org/
+[Anaconda](https://anaconda.org/)
