@@ -6,6 +6,13 @@
 
 A small linting and building command line tool for reproducible R analysis with Docker at QBiC.
 
+## Steps to reproducible R analyses
+
+1. Create project from [template](doc/Rmageddon-cookiecutter.md) 
+2. [Resolve](doc/Rmageddon.md) conda packages from R `sessionInfo` 
+3. [Lint](doc/Rmageddon.md) the project against the guidelines
+
+
 ## Motivation
 
 Performing a reproducible analysis with R and share the environment status of an R installation with the 
