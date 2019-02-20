@@ -1,0 +1,7 @@
+name: {{ cookiecutter.project_code }}000_{{ cookiecutter.project_label }}_ranalysis{{ cookiecutter.container_version }}
+channels:
+  - bioconda
+  - r
+  - defaults
+dependencies:
+  - r-base={{ cookiecutter.r_version  }}

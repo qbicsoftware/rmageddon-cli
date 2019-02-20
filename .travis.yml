@@ -1,10 +1,12 @@
 sudo: required
 language: python
+dist: xenial
 python:
  - '2.7'
  - '3.4'
  - '3.5'
  - '3.6'
+ - '3.7'
 install:
  - cd ${TRAVIS_BUILD_DIR}
  - pip install --upgrade pip
@@ -12,7 +14,7 @@ install:
  - pip install codecov pytest pytest-cov cookiecutter
 script:
  - python -m pytest --cov=r_lint .
- - cookiecutter --no-input https://github.com/qbicsoftware/r-container-template
+ - cookiecutter --no-input .
  - cd QABCD
  - r-lint lint .
  - cd ${TRAVIS_BUILD_DIR}
