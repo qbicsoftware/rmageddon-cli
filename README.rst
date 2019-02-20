@@ -9,7 +9,8 @@ Rmageddon
 
 A small linting and building command line tool for reproducible R analysis with Docker at QBiC.
 
-## Motivation
+Motivation
+####
 
 Performing a reproducible analysis with R and share the environment status of an R installation with the 
 necessary packages and all that with the correct version is a very challenging task.
