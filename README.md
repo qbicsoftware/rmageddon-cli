@@ -15,7 +15,7 @@ In order to face this issue, under the umbrella of better reproducibility of com
 `Rmageddon`, a small command-line tool, that assists in the build of Docker container with specified version of R and
 a dedicated, version-defined package installation. Moreover, Rmageddon provides cookiecutter templates for the easy creation of docker environments for your R analysis.
 
-The container collection is hosted on a different GitHub repository: [R-container-lib](https://github.com/qbicsoftware/r-container-lib) .All containers there passed the linting and have been build with Rmageddon.
+The container collection is hosted on a different GitHub repository: [R-container-lib](https://github.com/qbicsoftware/r-container-lib). All containers there passed the linting and have been build with Rmageddon.
 
 The complete workflow for the creation of a new container for your R-analysis is depicted in the following image: 
     
