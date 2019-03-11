@@ -10,6 +10,7 @@ import logging
 
 import rmageddon.lint
 import rmageddon.builder
+from rmageddon.validation import RAnalysisValidation
 
 
 @click.group()
@@ -67,6 +68,24 @@ def build(rpackages, conda_env):
     if len(env_builder.failed) > 0: sys.exit(1)
 
 
+@rmageddon_cli.command()
+@click.argument(
+    'files',
+    nargs=2,
+    type=click.Path(exists=True),
+    required=True,
+    metavar="<R analysis result files to validate>"
+)
+def validate(files):
+    """ Create a diff of two R analysis result files"""
+    logging.info("Validating R analysis results...")
+    validator = RAnalysisValidation(files[0], files[1])
+    validator.diff()
+    validator.print_results()
+
+    if len(validator.failed) > 0: sys.exit(1)
+
+
 if __name__ == '__main__':
     print("""
  _______  _______  _______  _______  _______  ______   ______   _______  _       
@@ -78,7 +97,7 @@ if __name__ == '__main__':
 | ) \ \__| )   ( || )   ( || (___) || (____/\| (__/  )| (__/  )| (___) || )  \  |
 |/   \__/|/     \||/     \|(_______)(_______/(______/ (______/ (_______)|/    )_)
                                                   
-2018, QBiC software, Sven Fillinger
+2018, QBiC software, Sven Fillinger, Lukas Heumos
 sven.fillinger@qbic.uni-tuebingen.de
     """)
     rmageddon_cli()

@@ -9,6 +9,7 @@ import logging
 from ruamel.yaml import YAML
 import click
 
+
 class RContainerLint(object):
     """ Object that hold linting info and result """
 
@@ -20,7 +21,6 @@ class RContainerLint(object):
         self.warned = []
         self.passed = []
 
-    
     def lint_rproject(self):
         """ Main linting function.
 
@@ -56,7 +56,7 @@ class RContainerLint(object):
                 if len(self.failed) > 0:
                     logging.error("Found test failures in '{}', halting lint run.".format(fname))
                     break
-    
+
     def check_files_exist(self):
         """ Check, that files like Dockerfile and the conda
         environment.yml exists, and report a failing test, if not.
@@ -77,19 +77,18 @@ class RContainerLint(object):
                 self.failed.append((1, 'File {} not found.'.format(files)))
             else:
                 self.passed.append((1, 'File {} found.'.format(files)))
-        
+
         for files in files_warn:
             if not os.path.isdir(self.pf(files)):
                 self.warned.append((1, 'Dir {} not found.'.format(files)))
             else:
                 self.passed.append((1, 'Dir {} found.'.format(files)))
-        
+
         if os.path.isfile(self.pf('environment.yml')):
             with open(self.pf('environment.yml'), 'r') as fh:
                 yaml = YAML()
                 self.conda_config = yaml.load(fh)
 
-        
     def check_dockerfile(self):
         """ Check the Dockerfile not to be empty and fulfill
         some basic checks:
@@ -98,8 +97,9 @@ class RContainerLint(object):
             - Some labels present
         """
 
-        with open(self.pf('Dockerfile')) as d_file: content = d_file.readlines()
-        
+        with open(self.pf('Dockerfile')) as d_file:
+            content = d_file.readlines()
+
         if not content:
             self.failed.append((2, 'Dockerfile seems to be empty.'))
             return
@@ -119,7 +119,7 @@ class RContainerLint(object):
             if 'environment.yml' in line:
                 line = line.strip()
                 environment_def.append(line)
-        
+
         # 1. Evaluate the base image beeing from r-base
         if not base_img:
             self.failed.append((2, 'No base image was defined in the Dockerfile.'))
@@ -142,20 +142,20 @@ class RContainerLint(object):
             if not any(label == x for x in labels.keys()):
                 self.failed.append((2, 'You havent\'t set LABEL \'{}\' in the Dockerfile.'.format(label)))
                 return
-        
+
         # 3. Check if labels are empty
         for mand_label in expected_labels:
             if not labels[mand_label]:
                 self.failed.append((2, "You did not provide content for label \'{}\' "
-                    "for your container.".format(mand_label)))
+                                       "for your container.".format(mand_label)))
                 return
-        
+
         # 4. Check name matches regex
         name = r"(Q|q)[a-zA-Z0-9]{4}000_[a-zA-Z0-9]{1,15}_ranalysis"
         match = re.search(name, labels["name"])
         if not match:
             self.failed.append((2, "The container name was invalid. Make sure it "
-                "matches the specification! Name was: {}".format(labels["name"])))
+                                   "matches the specification! Name was: {}".format(labels["name"])))
             return
 
         # 5. Check version matches regex
@@ -163,11 +163,10 @@ class RContainerLint(object):
         match = re.search(sem_version, labels["version"])
         if not match:
             self.failed.append((2, "The version of the container was malformatted."
-                " Be sure that you use semantic versioning <major>.<minor>.<patch> (https://semver.org/)"))
+                                   " Be sure that you use semantic versioning <major>.<minor>.<patch> (https://semver.org/)"))
             return
 
         self.passed.append((2, 'All labels set correctly in the Dockerfile'))
-        
 
     def check_conda_environment(self):
         """ Make some simple checks for the rpackages.txt,
@@ -178,8 +177,7 @@ class RContainerLint(object):
         we should test if the packages exist.
         """
         if not os.path.isfile(self.pf('environment.yml')): return
-    
-        
+
         # Define the mandatory conda declarations
         mand_conda_settings = [
             'name',
@@ -196,10 +194,10 @@ class RContainerLint(object):
         for declaration in mand_conda_settings:
             if not self.conda_config.get(declaration):
                 self.failed.append((3, "The conda env declaration \'{dec}\' is missing.".format(
-                    dec = declaration
+                    dec=declaration
                 )))
                 return
-        
+
         # Check the name regex
         # <projectcode>-ranalysis
         env_name = r"(Q|q)[a-zA-Z0-9]{4}000_[a-zA-Z0-9]{1,15}_ranalysis"
@@ -208,13 +206,13 @@ class RContainerLint(object):
             self.failed.append((3, "The conda environment name was not set properly. \
             Make sure, it follows the guidelines."))
             return
-        
+
         # Check that channels 'default' and 'r' are present
-        missing_channels = list([ch for ch in mand_channel_settings 
-            if not ch in self.conda_config.get('channels')])
+        missing_channels = list([ch for ch in mand_channel_settings
+                                 if not ch in self.conda_config.get('channels')])
 
         for ch in missing_channels:
-            self.failed.append((3, "Channel {ch} was not defined.".format(ch = ch)))
+            self.failed.append((3, "Channel {ch} was not defined.".format(ch=ch)))
             return
 
         # Check that the dependency for r-base is there, and a version is set.
@@ -227,33 +225,33 @@ class RContainerLint(object):
         if not '=' in rbase[0]:
             self.failed.append((3, "Could not determine that \'r-base\' has a version tag."))
             return
-            
+
         # Check that the version is numeric
         version = rbase[0].strip().split('=')[-1].replace('.', '')
         if not version.isdigit():
             self.failed.append((3, "The version tag \'{tag}\' was not numeric!".format(
-                tag = rbase[0].strip().split('=')[-1]
+                tag=rbase[0].strip().split('=')[-1]
             )))
             return
-        
+
         self.passed.append((3, 'The conda environment seems to be OK.'))
-
-
 
     def pf(self, file_path):
         """ Quick path join helper method """
         return os.path.join(self.path, file_path)
 
     def print_results(self):
-        # Print results
-        logging.info("===========\n BUILD RESULTS\n=================\n" +
-            "{0:>4} tests passed".format(len(self.passed)) +
-            "{0:>4} tests had warnings".format(len(self.warned)) +
-            "{0:>4} tests failed".format(len(self.failed))
-        )
+        logging.info("===========\n LINT RESULTS\n=================\n" +
+                 "{0:>4} build steps passed".format(len(self.passed)) +
+                 "{0:>4} build steps had warnings".format(len(self.warned)) +
+                 "{0:>4} build steps failed".format(len(self.failed))
+                 )
         if len(self.passed) > 0:
-            logging.debug("Test Passed:\n  {}".format("\n  ".join(["#{}: {}".format(eid, msg) for eid, msg in self.passed])))
+            logging.debug(
+                "Test Passed:\n  {}".format("\n  ".join(["#{}: {}".format(eid, msg) for eid, msg in self.passed])))
         if len(self.warned) > 0:
-            logging.warn("Test Warnings:\n  {}".format("\n  ".join(["#{}: {}".format(eid, msg) for eid, msg in self.warned])))
+            logging.warning(
+                "Test Warnings:\n  {}".format("\n  ".join(["#{}: {}".format(eid, msg) for eid, msg in self.warned])))
         if len(self.failed) > 0:
-            logging.error("Test Failures:\n  {}".format("\n  ".join(["#{}: {}".format(eid, msg) for eid, msg in self.failed])))
+            logging.error(
+                "Test Failures:\n  {}".format("\n  ".join(["#{}: {}".format(eid, msg) for eid, msg in self.failed])))
