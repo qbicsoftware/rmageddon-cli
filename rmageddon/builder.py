@@ -51,7 +51,7 @@ class EnvBuilder(object):
             for fname in fnames:
                 getattr(self, fname)()
                 if len(self.failed) > 0:
-                    LOG.error("Found test failures in '{}', \
+                    logging.error("Found test failures in '{}', \
                     halting lint run.".format(fname))
                     break
 
