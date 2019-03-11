@@ -23,7 +23,7 @@ class TestValidation(unittest.TestCase):
     """ Class for validation tests """
 
     def assess_validation_status(self, validation_obj, **expected):
-        """Little helper function for assessing the lint
+        """Little helper function for assessing the validation
         object status lists"""
         for list_type, expect in expected.items():
             observed = len(getattr(validation_obj, list_type))
