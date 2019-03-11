@@ -129,3 +129,10 @@ Dockerfile
     - ``LABEL version`` - The 3-digit numeric version string following the `semantic version standard`__
     - ``LABEL organization`` - The organization's name
     - ``LABEL github`` - The link to the GitHub repository
+
+The subcommand <b>validate</b>
+---------------------
+The subcommand <validate> is validating two R-analysis output files. For now it performs a diff of the two files and displays any differing lines.
+```bash
+ $ rmageddon validate /path/to/R-analysis-file-one /path/to/R-analysis-file-two
+```    
