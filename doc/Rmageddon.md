@@ -65,7 +65,11 @@ The subcommand <b>build</b>
 
 The subcommand ``build`` is a small helper tool, that is able to parse ``sessionInfo`` output from R and extracts the package names with versions.
 
-It then takes these and checks on [Anaconda Cloud](https://anaconda.org/) if these are available in one of the pre-defined channels `[default, r, bioconda]`. If successful, it will automatically add the corresponding conda package with version in the `environment.yml`. If a package cannot be found, a warning is printed on the command-line. If a specified version of a package is not found, it prints the available versions on the command-line.
+It then takes these and checks on [Anaconda Cloud](https://anaconda.org/) if these are available in one of the pre-defined channels `[default, r, bioconda]`. If successful, it will automatically add the corresponding conda package with version in the `environment.yml`. If a package cannot be found, a warning is printed on the command-line. If a specified version of a package is not found, it prints the available versions on the command-line.    
+Your current conda build can be exported using:
+```bash
+conda env export > environment.yml
+```
 
 To start the build, be sure you have an active internet connection and run it with:
 
@@ -81,7 +85,6 @@ The ``R package list`` can be obtained from inside your active R session, that w
 ```
 This is your R package list, which is needed for rmageddon build to work properly.
 
-[Anaconda](https://anaconda.org/)
 
 
 The subcommand <b>lint</b>
