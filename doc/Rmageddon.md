@@ -68,11 +68,11 @@ The subcommand ``build`` is a small helper tool, that is able to parse ``session
 
 It then takes these and checks on [Anaconda Cloud](https://anaconda.org/) if these are available in one of the pre-defined channels `[default, r, bioconda]`. If successful, it will automatically add the corresponding conda package with version in the `environment.yml`. If a package cannot be found, a warning is printed on the command-line.
 If a specified version of a package is not found, it prints the available versions on the command-line.    
-If you are using anaconda you can export your current build using:
+**In case you are using anaconda** you can export your current build using:
 ```bash
 conda env export > environment.yml
 ```
-If you are not using anaconda you have to provide an environment.yml file created by [Rmageddon-cookiecutter](doc/Rmageddon-cookiecutter.md). It has to look remotely similar to this:    
+**If you are not using anaconda** you have to provide an environment.yml file created by [Rmageddon-cookiecutter](doc/Rmageddon-cookiecutter.md). It has to look remotely similar to this:    
 ```bash
 name: QABCD000_basic_ranalysis0.1.0    
 channels:    
@@ -96,8 +96,9 @@ The ``R package list`` can be obtained from inside your active R session, that w
 
     > sessionInfo()$otherPkgs
 ```
-, where $otherPkgs is an optional character vector of other attached packages.      
-This is your R package list or commonly refered to 'sessioninfo file', which is needed for Rmageddon build to work properly.
+where $otherPkgs is an **optional** character vector of other attached packages.
+If you need any additional information about the ``sessioninfo`` command you can refer to [Sessioninfo Doc](https://www.rdocumentation.org/packages/utils/versions/3.5.3/topics/sessionInfo).          
+This is your R package list or commonly refered to 'sessioninfo file', which is needed for Rmageddon build.
 
 
 The subcommand <b>lint</b>
