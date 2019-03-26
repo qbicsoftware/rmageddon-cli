@@ -96,7 +96,7 @@ The ``R package list`` can be obtained from inside your active R session, that w
 
     > sessionInfo() <otherPkgs>
 ```
-where <otherPkgs> is an **optional** character vector of other attached packages.
+where \<otherPkgs\> is an **optional** character vector of other attached packages.
 If you need any additional information about the ``sessioninfo`` command you can refer to [Sessioninfo Doc](https://www.rdocumentation.org/packages/utils/versions/3.5.3/topics/sessionInfo).          
 This is your R package list or commonly refered to 'sessioninfo file', which is needed for Rmageddon build.
 
