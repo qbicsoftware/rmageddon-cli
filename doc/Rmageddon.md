@@ -24,8 +24,8 @@ Or if you want the latest development version, you can install from the ``master
 The command-line interface
 ===========================
 
-Once you have installed rmageddon, just call it with the ``--help`` option to get an overview of the subcommands
-available in rmageddon:
+Once you have installed Rmageddon, just call it with the ``--help`` option to get an overview of the subcommands
+available in Rmageddon:
 
 ```bash
 
@@ -40,7 +40,7 @@ available in rmageddon:
 |/   \__/|/     \||/     \|(_______)(_______/(______/ (______/ (_______)|/    )_)
                                                                                  
                                                   
-    2018, QBiC software, Sven Fillinger
+    2019, QBiC software, Sven Fillinger
     sven.fillinger@qbic.uni-tuebingen.de
         
     Usage: rmageddon [OPTIONS] COMMAND [ARGS]...
@@ -53,6 +53,7 @@ available in rmageddon:
     Commands:
     build  Resolve R packages resources from Anaconda...
     lint   Check R project against linting guidelines
+    validate Performs a diff on two R-analysis output files
 ```
 
 
@@ -63,18 +64,30 @@ If you want to know the positional arguments and options of each subcommand, jus
 The subcommand <b>build</b>
 ----------------------
 
-The subcommand ``build`` is a small helper tool, that is able to parse ``sessionInfo`` output from R and extracts the package names with versions.
+The subcommand ``build`` is a small helper tool, that is able to parse ``sessionInfo`` output from R and extract the package names with versions.
 
-It then takes these and checks on [Anaconda Cloud](https://anaconda.org/) if these are available in one of the pre-defined channels `[default, r, bioconda]`. If successful, it will automatically add the corresponding conda package with version in the `environment.yml`. If a package cannot be found, a warning is printed on the command-line. If a specified version of a package is not found, it prints the available versions on the command-line.    
-Your current conda build can be exported using:
+It then takes these and checks on [Anaconda Cloud](https://anaconda.org/) if these are available in one of the pre-defined channels `[default, r, bioconda]`. If successful, it will automatically add the corresponding conda package with version in the `environment.yml`. If a package cannot be found, a warning is printed on the command-line.
+If a specified version of a package is not found, it prints the available versions on the command-line.    
+If you are using anaconda you can export your current build using:
 ```bash
 conda env export > environment.yml
 ```
+If you are not using anaconda you have to provide an environment.yml file created by [Rmageddon-cookiecutter](doc/Rmageddon-cookiecutter.md). It has to look remotely similar to this:    
+```bash
+name: QABCD000_basic_ranalysis0.1.0    
+channels:    
+  - bioconda    
+  - r    
+  - defaults    
+dependencies:    
+  - r-base=3.2.4    
+```
+
 
 To start the build, be sure you have an active internet connection and run it with:
 
 ```bash 
-    $ rmageddon build <R package list> environment.yml
+    $ rmageddon build <sessioninfo file> environment.yml
 ```
 
 The ``R package list`` can be obtained from inside your active R session, that was used to run your R analysis successfully. From within your R console, just type:
@@ -83,14 +96,14 @@ The ``R package list`` can be obtained from inside your active R session, that w
 
     > sessionInfo()$otherPkgs
 ```
-This is your R package list, which is needed for rmageddon build to work properly.
-
+, where $otherPkgs is an optional character vector of other attached packages.      
+This is your R package list or commonly refered to 'sessioninfo file', which is needed for Rmageddon build to work properly.
 
 
 The subcommand <b>lint</b>
 ---------------------
 
-The subcommand <lint> is actually checking an R container project against some specified rule-set. Currently, *rmageddon* is assuming the following project structure:
+The subcommand <lint> is actually checking an R container project against some specified rule-set. Currently, *Rmageddon* is assuming the following project structure:
 ```bash
 
     .

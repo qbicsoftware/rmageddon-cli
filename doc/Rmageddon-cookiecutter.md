@@ -34,11 +34,12 @@ Cookiecutter will replace placeholders with the information you provided and you
 │   │       └── example.R
 
 ```
+The environment.yml file can be used for Rmageddon-build if you are not using your own anaconda environment file.
 
 # Author
 
 This template was created by Sven Fillinger [@sven1103](https://github.com/sven1103), QBiC, University of Tübingen.
 
-# Aknowledgements
+# Acknowledgements
 
 I want to thank the creators of [cookiecutter](https://github.com/audreyr/cookiecutter) for this amazing templating tool!
