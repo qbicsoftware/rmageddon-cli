@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 import sys
 
-version = '0.2.0'
+version = '0.2.1'
 
 with open('README.md') as f:
     readme = f.read()
@@ -13,6 +13,7 @@ with open('LICENSE') as f:
 
 with open('requirements.txt') as f:
     required = f.read().splitlines()
+
 
 setup(
     name='rmageddon',
