@@ -1,6 +1,6 @@
 # Rmageddon
 
-This is the main documentation for the Rmageddon core functionality: building and linting. The documentation for Rmageddons cookiecutter can be found here: [Rmageddon-cookiecutter](Rmageddon-cookiecutter)
+This is the main documentation for the Rmageddon core functionality: building and linting. The documentation for Rmageddons cookiecutter can be found here: [Rmageddon-cookiecutter](Rmageddon-cookiecutter.md)
 
 
 Installation
@@ -72,7 +72,7 @@ If a specified version of a package is not found, it prints the available versio
 ```bash
 conda env export > environment.yml
 ```
-**If you are not using anaconda** you have to provide an environment.yml file created by [Rmageddon-cookiecutter](doc/Rmageddon-cookiecutter.md). It has to look remotely similar to this:    
+**If you are not using anaconda** you have to provide an environment.yml file created by [Rmageddon-cookiecutter](Rmageddon-cookiecutter.md). It has to look remotely similar to this:    
 ```bash
 name: QABCD000_basic_ranalysis0.1.0    
 channels:    
