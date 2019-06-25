@@ -216,7 +216,7 @@ class RContainerLint(object):
             self.failed.append((3, "Could not find the \'r-base\' dependency."))
             return
 
-        # Check that every dependency has a version tag
+        # Check that every dependency has a version tag and that it's numerical
         dependencies = list([basepkg for basepkg in self.conda_config.get("dependencies")])
         for dependency in dependencies:
             strip = dependency.strip().split('=')
