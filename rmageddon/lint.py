@@ -53,9 +53,6 @@ class RContainerLint(object):
         with click.progressbar(check_functions, label='Running R projects tests', item_show_func=repr) as fnames:
             for fname in fnames:
                 getattr(self, fname)()
-                if len(self.failed) > 0:
-                    logging.error("Found test failures in '{}', halting lint run.".format(fname))
-                    break
 
     def check_files_exist(self):
         """ Check, that files like Dockerfile and the conda
@@ -140,7 +137,7 @@ class RContainerLint(object):
         ]
         for label in expected_labels:
             if not any(label == x for x in labels.keys()):
-                self.failed.append((2, 'You havent\'t set LABEL \'{}\' in the Dockerfile.'.format(label)))
+                self.failed.append((2, f'You havent\'t set LABEL \'{label}\' in the Dockerfile.'))
                 return
 
         # 3. Check if labels are empty
@@ -193,9 +190,7 @@ class RContainerLint(object):
         # Check that the mandatory conda env declarations are there
         for declaration in mand_conda_settings:
             if not self.conda_config.get(declaration):
-                self.failed.append((3, "The conda env declaration \'{dec}\' is missing.".format(
-                    dec=declaration
-                )))
+                self.failed.append((3, f"The conda env declaration \'{declaration}\' is missing."))
                 return
 
         # Check the name regex
@@ -212,27 +207,28 @@ class RContainerLint(object):
                                  if not ch in self.conda_config.get('channels')])
 
         for ch in missing_channels:
-            self.failed.append((3, "Channel {ch} was not defined.".format(ch=ch)))
+            self.failed.append((3, f"Channel {ch} was not defined."))
             return
 
-        # Check that the dependency for r-base is there, and a version is set.
+        # Check that the dependency for r-base is there
         rbase = list([basepkg for basepkg in self.conda_config.get("dependencies") if 'r-base' in basepkg])
         if not rbase:
             self.failed.append((3, "Could not find the \'r-base\' dependency."))
             return
 
-        # Check that a version is given for the r-base pkg
-        if not '=' in rbase[0]:
-            self.failed.append((3, "Could not determine that \'r-base\' has a version tag."))
-            return
-
-        # Check that the version is numeric
-        version = rbase[0].strip().split('=')[-1].replace('.', '')
-        if not version.isdigit():
-            self.failed.append((3, "The version tag \'{tag}\' was not numeric!".format(
-                tag=rbase[0].strip().split('=')[-1]
-            )))
-            return
+        # Check that every dependency has a version tag
+        dependencies = list([basepkg for basepkg in self.conda_config.get("dependencies")])
+        for dependency in dependencies:
+            strip = dependency.strip().split('=')
+            version = strip[-1] if len(strip) > 1 else None
+            if not version:
+                self.failed.append((3, f"No version was supplied for {dependency}"
+                                    ))
+                return
+            cleaned_version = version.replace('.', '')
+            if not cleaned_version.isdigit():
+                self.failed.append((3, f"The version tag \'{version}\' was not numeric!"))
+                return
 
         self.passed.append((3, 'The conda environment seems to be OK.'))
 
@@ -242,10 +238,10 @@ class RContainerLint(object):
 
     def print_results(self):
         logging.info("===========\n LINT RESULTS\n=================\n" +
-                 "{0:>4} build steps passed".format(len(self.passed)) +
-                 "{0:>4} build steps had warnings".format(len(self.warned)) +
-                 "{0:>4} build steps failed".format(len(self.failed))
-                 )
+                     "{0:>4} build steps passed".format(len(self.passed)) +
+                     "{0:>4} build steps had warnings".format(len(self.warned)) +
+                     "{0:>4} build steps failed".format(len(self.failed))
+                     )
         if len(self.passed) > 0:
             logging.debug(
                 "Test Passed:\n  {}".format("\n  ".join(["#{}: {}".format(eid, msg) for eid, msg in self.passed])))

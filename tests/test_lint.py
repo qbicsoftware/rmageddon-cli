@@ -23,6 +23,7 @@ def listfiles(path):
     files_found = []
     for (_, _, files) in os.walk(path):
         files_found.extend(files)
+
     return files_found
 
 
@@ -92,7 +93,7 @@ class TestLint(unittest.TestCase):
         """
         lint_obj = lint.RContainerLint(PATH_BAD_DOCKERFILE)
         lint_obj.lint_rproject()
-        expectations = {"failed": 1, "warned": 2, "passed": 1}
+        expectations = {"failed": 2, "warned": 2, "passed": 1}
         self.assess_lint_status(lint_obj, **expectations)
 
     def test_rpackage_empty_warn(self):
@@ -141,14 +142,13 @@ class TestLint(unittest.TestCase):
         self.assess_lint_status(lint_obj, **expectations)
 
     def test_conda_env_file_no_rversion_tag(self):
-        """ Check that the conda env file has a name property and that it
-        follows a certain regex, fail if not """
+        """ Check that the r-version tag is set in the conda environment file. """
         lint_obj = lint.RContainerLint(PATH_BAD_EXAMPLE)
         lint_obj.check_files_exist()
         yaml = YAML()
         lint_obj.conda_config = yaml.load(
             """
-            name: qbicsoftware-QTEST-ranalyses-1.0
+            name: Qtest000_a_ranalysis
             channels:
                 - bioconda
                 - r
@@ -163,14 +163,13 @@ class TestLint(unittest.TestCase):
         self.assess_lint_status(lint_obj, **expectations)
 
     def test_conda_env_file_wrong_rversion_tag(self):
-        """ Check that the conda env file has a name property and that it
-        follows a certain regex, fail if not """
+        """ Check that the conda env file has a NUMERICAL version tag for r-base"""
         lint_obj = lint.RContainerLint(PATH_BAD_EXAMPLE)
         lint_obj.check_files_exist()
         yaml = YAML()
         lint_obj.conda_config = yaml.load(
             """
-            name: qbicsoftware-QTEST-ranalyses-1.0
+            name: Qtest000_a_ranalysis
             channels:
                 - bioconda
                 - r
@@ -178,6 +177,48 @@ class TestLint(unittest.TestCase):
             dependencies:
                 - r-base=1.0dev
                 - r-ggplot2
+            """
+        )
+        lint_obj.check_conda_environment()
+        expectations = {"failed": 1, "warned": 2, "passed": 2}
+        self.assess_lint_status(lint_obj, **expectations)
+
+    def test_missing_dependency_version(self):
+        """ Check that every dependency has a version property."""
+        lint_obj = lint.RContainerLint(PATH_BAD_EXAMPLE)
+        lint_obj.check_files_exist()
+        yaml = YAML()
+        lint_obj.conda_config = yaml.load(
+            """
+            name: Qtest000_a_ranalysis
+            channels:
+                - bioconda
+                - r
+                - defaults
+            dependencies:
+                - r-base=1.0
+                - r-ggplot2
+            """
+        )
+        lint_obj.check_conda_environment()
+        expectations = {"failed": 1, "warned": 2, "passed": 2}
+        self.assess_lint_status(lint_obj, **expectations)
+
+    def test_bad_dependency_signature(self):
+        """ Check that every dependency has a version property and that it's NUMERICAL."""
+        lint_obj = lint.RContainerLint(PATH_BAD_EXAMPLE)
+        lint_obj.check_files_exist()
+        yaml = YAML()
+        lint_obj.conda_config = yaml.load(
+            """
+            name: Qtest000_a_ranalysis
+            channels:
+                - bioconda
+                - r
+                - defaults
+            dependencies:
+                - r-base=1.0
+                - r-ggplot2=2.0dev
             """
         )
         lint_obj.check_conda_environment()
