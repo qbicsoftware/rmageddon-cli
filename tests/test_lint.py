@@ -103,6 +103,15 @@ class TestLint(unittest.TestCase):
         expectations = {"failed": 1, "warned": 0, "passed": 0}
         self.assess_lint_status(lint_obj, **expectations)
 
+    def test_semantic_version_container_fail(self):
+        """ If the container version does not follow the sematic versioning
+        style-guide, the linting should fail."""
+        lint_obj = lint.RContainerLint(PATH_BAD_EXAMPLE)
+        lint_obj.load_environment_config()
+        lint_obj.check_conda_environment()
+        expectations = {"failed": 1, "warned": 0, "passed": 0}
+        self.assess_lint_status(lint_obj, **expectations)
+
     def test_rpackage_pass(self):
         """ Check if the rpackages.txt is formatted correctly """
         lint_obj = lint.RContainerLint(PATH_MINIMAL_WORKING_EXAMPLE)
