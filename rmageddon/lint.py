@@ -184,7 +184,8 @@ class RContainerLint(object):
         # Define the mandatory conda channels (min. requirement)
         mand_channel_settings = [
             'defaults',
-            'r'
+            'conda-forge',
+            'bioconda'
         ]
 
         # Check that the mandatory conda env declarations are there

@@ -1,7 +1,7 @@
 name: qtest000_1_ranalysis
 channels:
   - bioconda
-  - r
+  - conda-forge
   - defaults
 dependencies:
   - r-base=3.4.3
