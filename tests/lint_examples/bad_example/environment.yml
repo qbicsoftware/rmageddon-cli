@@ -1,4 +1,4 @@
-name: qbicsoftware-dd-ranalyses-1.0
+name: qtest000_1_ranalysis_123
 channels:
   - bioconda
   - r

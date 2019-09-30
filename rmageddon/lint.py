@@ -82,7 +82,10 @@ class RContainerLint(object):
                 self.passed.append((1, 'Dir {} found.'.format(files)))
 
         if os.path.isfile(self.pf('environment.yml')):
-            with open(self.pf('environment.yml'), 'r') as fh:
+            self.load_environment_config()
+    
+    def load_environment_config(self):
+        with open(self.pf('environment.yml'), 'r') as fh:
                 yaml = YAML()
                 self.conda_config = yaml.load(fh)
 
@@ -187,11 +190,11 @@ class RContainerLint(object):
             'conda-forge',
             'bioconda'
         ]
-
+        
         # Check that the mandatory conda env declarations are there
-        for declaration in mand_conda_settings:
-            if not self.conda_config.get(declaration):
-                self.failed.append((3, f"The conda env declaration \'{declaration}\' is missing."))
+        for setting in mand_conda_settings:
+            if not self.conda_config.get(setting):
+                self.failed.append((3, f"The conda environment setting \'{setting}\' is missing."))
                 return
 
         # Check the name regex
@@ -203,10 +206,9 @@ class RContainerLint(object):
             Make sure, it follows the guidelines."))
             return
 
-        # Check that channels 'default' and 'r' are present
+        # Find missing channels
         missing_channels = list([ch for ch in mand_channel_settings
                                  if not ch in self.conda_config.get('channels')])
-
         for ch in missing_channels:
             self.failed.append((3, f"Channel {ch} was not defined."))
             return
