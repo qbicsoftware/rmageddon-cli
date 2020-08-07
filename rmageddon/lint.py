@@ -223,7 +223,7 @@ class RContainerLint(object):
         dependencies = list([basepkg for basepkg in self.conda_config.get("dependencies")])
         for dependency in dependencies:
             strip = dependency.strip().split('=')
-            version = strip[-1] if len(strip) > 1 else None
+            version = strip[1] if len(strip) > 1 else None
             if not version:
                 self.failed.append((3, f"No version was supplied for {dependency}"
                                     ))

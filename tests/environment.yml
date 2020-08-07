@@ -5,4 +5,6 @@ channels:
   - defaults
 dependencies:
   - r-base=3.4.3
+  - compiler-rt_osx-64=10.0.0=hbcc88fd_0
+  - gettext=0.19.8.1=h15daf44_
   - bioconductor-edger

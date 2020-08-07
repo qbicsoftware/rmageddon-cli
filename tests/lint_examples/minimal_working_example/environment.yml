@@ -6,3 +6,4 @@ channels:
 dependencies:
   - r-base=3.4.3
   - r-ggplot2=3.2.0
+  - harfbuzz=1.8.8=hb8d4a28_0
