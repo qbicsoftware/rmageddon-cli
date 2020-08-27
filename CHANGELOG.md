@@ -1,3 +1,5 @@
+## 0.3.1 27-08-2020
+- Fix conda package linting [#31](https://github.com/qbicsoftware/rmageddon-cli/pull/31)
 
 ## 0.3.0
 - Removes r channel
