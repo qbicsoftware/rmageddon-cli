@@ -224,14 +224,20 @@ class RContainerLint(object):
         for dependency in dependencies:
             strip = dependency.strip().split('=')
             version = strip[1] if len(strip) > 1 else None
+            build = strip[2] if len(strip) > 2 else None
             if not version:
                 self.failed.append((3, f"No version was supplied for {dependency}"
                                     ))
                 return
-            cleaned_version = version.replace('.', '')
+            cleaned_version = version.replace('.', '').replace('_', '')
             if not cleaned_version.isdigit():
                 self.failed.append((3, f"The version tag \'{version}\' was not numeric!"))
                 return
+
+
+            
+            
+            
 
         self.passed.append((3, 'The conda environment seems to be OK.'))
 
