@@ -62,11 +62,12 @@ class RContainerLint(object):
 
         files_fail = [
             'Dockerfile',
-            'environment.yml'
-        ]
-        files_warn = [
+            'environment.yml',
             'data',
             'scripts'
+        ]
+        files_warn = [
+            
         ]
 
         for files in files_fail:
