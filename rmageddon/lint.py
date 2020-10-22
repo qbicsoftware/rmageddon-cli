@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 """ Linting code for QBiC R analysis environment
 checks.
 """
@@ -62,12 +63,16 @@ class RContainerLint(object):
 
         files_fail = [
             'Dockerfile',
-            'environment.yml',
-            'data',
-            'scripts'
+            'environment.yml'
         ]
+        
         files_warn = [
 
+        ]
+
+        folders_fail = [
+            'data',
+            'scripts'
         ]
 
         for files in files_fail:
@@ -81,6 +86,15 @@ class RContainerLint(object):
                 self.warned.append((1, 'Dir {} not found.'.format(files)))
             else:
                 self.passed.append((1, 'Dir {} found.'.format(files)))
+                
+        for folder in folders_fail:
+            if not os.path.isdir(self.pf(folder)):
+                self.failed.append((1, 'Dir {} not found.'.format(folder)))
+            elif len(os.listdir(self.pf(folder))) == 0 :
+                self.warned.append((1, 'Dir {} is empty.'.format(folder)))
+            else:
+                self.passed.append((1, 'Dir {} found.'.format(folder)))
+
 
         if os.path.isfile(self.pf('environment.yml')):
             self.load_environment_config()

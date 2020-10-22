@@ -13,7 +13,10 @@ RUN apt-get update && apt-get install -y procps && apt-get clean -y
 # Update the base version of conda
 RUN conda update -n base conda
 # Copy the list of R packages into the container's /tmp dir
-COPY environment.yml /tmp
+WORKDIR /{{ cookiecutter.project_code }}
+COPY environment.yml /environment
+COPY scripts
+COPY data
 RUN conda update -n base conda && \
     conda env create -f /tmp/environment.yml && \
     conda clean -a
