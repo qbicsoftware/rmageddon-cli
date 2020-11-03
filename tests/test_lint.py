@@ -18,7 +18,6 @@ import unittest
 from ruamel.yaml import YAML
 import rmageddon.lint as lint
 
-
 def listfiles(path):
     files_found = []
     for (_, _, files) in os.walk(path):
@@ -59,11 +58,11 @@ class TestLint(unittest.TestCase):
             Minimal example for passing.
 
             Fails if not present: Dockerfile, environment.yml
-            Warns if not present: scripts, data
+            Warns if present and empty: scripts, data
         """
         lint_obj = lint.RContainerLint(PATH_MINIMAL_WORKING_EXAMPLE)
         lint_obj.lint_rproject()
-        expectations = {"failed": 2, "warned": 2, "passed": MAX_PASS_CHECKS - 4}
+        expectations = {"failed": 0, "warned": 2, "passed": MAX_PASS_CHECKS - 2}
         self.assess_lint_status(lint_obj, **expectations)
 
     def test_read_dir_ultimate_content_and_pass(self):
@@ -93,7 +92,7 @@ class TestLint(unittest.TestCase):
         """
         lint_obj = lint.RContainerLint(PATH_BAD_DOCKERFILE)
         lint_obj.lint_rproject()
-        expectations = {"failed": 6, "warned": 0, "passed": 1}
+        expectations = {"failed": 4, "warned": 0, "passed": 1}
         self.assess_lint_status(lint_obj, **expectations)
 
     def test_rpackage_empty_warn(self):
@@ -168,7 +167,7 @@ class TestLint(unittest.TestCase):
             """
         )
         lint_obj.check_conda_environment()
-        expectations = {"failed": 5, "warned": 0, "passed": 2}
+        expectations = {"failed": 3, "warned": 0, "passed": 2}
         self.assess_lint_status(lint_obj, **expectations)
 
     def test_conda_env_file_wrong_rversion_tag(self):
@@ -189,7 +188,7 @@ class TestLint(unittest.TestCase):
             """
         )
         lint_obj.check_conda_environment()
-        expectations = {"failed": 5, "warned": 0, "passed": 2}
+        expectations = {"failed": 3, "warned": 0, "passed": 2}
         self.assess_lint_status(lint_obj, **expectations)
 
     def test_missing_dependency_version(self):
@@ -210,7 +209,7 @@ class TestLint(unittest.TestCase):
             """
         )
         lint_obj.check_conda_environment()
-        expectations = {"failed": 5, "warned": 0, "passed": 2}
+        expectations = {"failed": 3, "warned": 0, "passed": 2}
         self.assess_lint_status(lint_obj, **expectations)
 
     def test_bad_dependency_signature(self):

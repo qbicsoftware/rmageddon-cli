@@ -78,6 +78,7 @@ class RContainerLint(object):
         for files in files_fail:
             if not os.path.isfile(self.pf(files)):
                 self.failed.append((1, 'File {} not found.'.format(files)))
+               
             else:
                 self.passed.append((1, 'File {} found.'.format(files)))
 
@@ -90,7 +91,8 @@ class RContainerLint(object):
         for folder in folders_fail:
             if not os.path.isdir(self.pf(folder)):
                 self.failed.append((1, 'Dir {} not found.'.format(folder)))
-            elif len(os.listdir(self.pf(folder))) == 0 :
+              
+            elif len(os.listdir(self.pf(folder))) == 1 :
                 self.warned.append((1, 'Dir {} is empty.'.format(folder)))
             else:
                 self.passed.append((1, 'Dir {} found.'.format(folder)))
